@@ -1,0 +1,31 @@
+﻿
+@{
+    ViewData["Title"] = "ObtenerInformacionPersona";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>ObtenerInformacionPersona</h1>
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="ObtenerInformacionPersona" method="post" id="formCedula">
+            <div class="form-group">
+                <label for="cedula" class="control-label">Cédula:</label>
+                <input type="text" id="cedula" name="cedula" class="form-control" placeholder="Ingresa la cédula" maxlength="9" minlength="9" />
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Buscar datos de persona" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    document.getElementById("formCedula").addEventListener("submit", function (event) {
+        const cedulaInput = document.getElementById("cedula");
+        if (cedulaInput.value.length !== 9) {
+            alert("La cédula debe tener 9 dígitos.");
+            event.preventDefault(); // Evita que el formulario se envíe
+        }
+    });
+</script>
