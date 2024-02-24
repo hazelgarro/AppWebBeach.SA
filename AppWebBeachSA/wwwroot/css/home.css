@@ -28,8 +28,8 @@ h4 {
 .boton:hover {
     border-color: darkcyan;
     background: darkcyan;
-    font-weight:400;
-    color:white;
+    font-weight: 400;
+    color: white !important;
 }
 
 .caracteristicas {

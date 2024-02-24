@@ -5,63 +5,79 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Create</h1>
+<div class="d-flex justify-content-center">
+    <div>
+        <h1 class="text-center text-uppercase">Crear cuenta</h1>
 
-<h4>Cliente</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Cedula" class="control-label"></label>
-                <input asp-for="Cedula" class="form-control" value="@TempData["Cedula"]" readonly/>
-                <span asp-validation-for="Cedula" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="TipoCedula" class="control-label"></label>
-                <input asp-for="TipoCedula" class="form-control" value="@TempData["TipoCedula"]" readonly />
-                <span asp-validation-for="TipoCedula" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="NombreCompleto" class="control-label"></label>
-                <input asp-for="NombreCompleto" class="form-control" value="@TempData["NombreCompleto"]" readonly />
-                <span asp-validation-for="NombreCompleto" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Telefono" class="control-label"></label>
-                <input asp-for="Telefono" class="form-control" />
-                <span asp-validation-for="Telefono" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Direccion" class="control-label"></label>
-                <input asp-for="Direccion" class="form-control" />
-                <span asp-validation-for="Direccion" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Email" class="control-label"></label>
-                <input asp-for="Email" class="form-control" />
-                <span asp-validation-for="Email" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Password" class="control-label"></label>
-                <input asp-for="Password" class="form-control" value="@TempData["NombreCompleto"]" readonly />
-                <span asp-validation-for="Password" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="FechaRegistro" class="control-label"></label>
-                <input asp-for="FechaRegistro" class="form-control" />
-                <span asp-validation-for="FechaRegistro" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+        <h4 class="text-center">de cliente</h4>
     </div>
 </div>
 
+<hr />
 <div>
-    <a asp-action="Index">Back to List</a>
+    <div class="d-flex justify-content-center mb-2">
+        <a asp-action="Index" asp-controller="Home" class="btn btn-outline-dark fw-semibold">
+            Volver
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-counterclockwise" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M8 3a5 5 0 1 1-4.546 2.914.5.5 0 0 0-.908-.417A6 6 0 1 0 8 2z" />
+                <path d="M8 4.466V.534a.25.25 0 0 0-.41-.192L5.23 2.308a.25.25 0 0 0 0 .384l2.36 1.966A.25.25 0 0 0 8 4.466" />
+            </svg>
+        </a>
+    </div>
+</div>
+<div class="container d-flex justify-content-center col-md-8">
+    <div class="">
+        <div class="">
+            <div class="">
+                <form asp-action="Create">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group input-group-lg mb-3">
+                        <label asp-for="Cedula" class="control-label"></label>
+                        <input asp-for="Cedula" class="form-control" value="@TempData["Cedula"]" readonly />
+                        <span asp-validation-for="Cedula" class="text-danger"></span>
+                    </div>
+                    <div class="form-group input-group-lg mb-3">
+                        <label asp-for="TipoCedula" class="control-label"></label>
+                        <input asp-for="TipoCedula" class="form-control" value="@TempData["TipoCedula"]" readonly />
+                        <span asp-validation-for="TipoCedula" class="text-danger"></span>
+                    </div>
+                    <div class="form-group input-group-lg mb-3">
+                        <label asp-for="NombreCompleto" class="control-label"></label>
+                        <input asp-for="NombreCompleto" class="form-control" value="@TempData["NombreCompleto"]" readonly />
+                        <span asp-validation-for="NombreCompleto" class="text-danger"></span>
+                    </div>
+                    <div class="form-group input-group-lg mb-3">
+                        <label asp-for="Telefono" class="control-label"></label>
+                        <input asp-for="Telefono" class="form-control" required />
+                        <span asp-validation-for="Telefono" class="text-danger"></span>
+                    </div>
+                    <div class="form-group input-group-lg mb-3">
+                        <label asp-for="Direccion" class="control-label"></label>
+                        <input asp-for="Direccion" class="form-control" required />
+                        <span asp-validation-for="Direccion" class="text-danger"></span>
+                    </div>
+                    <div class="form-group input-group-lg mb-3">
+                        <label asp-for="Email" class="control-label"></label>
+                        <input asp-for="Email" class="form-control" required />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+                    <div class="form-group input-group-lg mb-3">
+                        <label asp-for="Password" class="control-label"></label>
+                        <input asp-for="Password" class="form-control" value="@TempData["NombreCompleto"]" readonly />
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+                    <div class="form-group input-group-lg mb-3">
+                        <label asp-for="FechaRegistro" class="control-label"></label>
+                        <input asp-for="FechaRegistro" class="form-control" required />
+                        <span asp-validation-for="FechaRegistro" class="text-danger"></span>
+                    </div>
+                    <div class="form-group d-flex justify-content-center mt-5 mb-4">
+                        <input type="submit" value="Crear" class="btn btn-outline-success form-size fs-5 fw-semibold" />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
 
 @section Scripts {

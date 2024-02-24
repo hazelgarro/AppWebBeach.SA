@@ -16,8 +16,13 @@
                 <h1>Hotel Beach</h1>
                 <p>El lugar que mereces para tus vacaciones</p>
             </div>
-            <div>
-                <button type="button" class="btn boton">Reservar &nbsp; <i class="fa-solid fa-arrow-right"></i></button>
+            <div class="d-flex">
+                <div>
+                    <a asp-area="" asp-controller="Reservaciones" asp-action="" class="btn boton">Reservar &nbsp; <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+                <div>
+                    <a asp-area="" asp-controller="Clientes" asp-action="ObtenerInformacionPersona" class="btn boton ms-4">Crear cuenta &nbsp; <i class="fa-solid fa-user-plus"></i></a>
+                </div>
             </div>
         </div>
     </section>
