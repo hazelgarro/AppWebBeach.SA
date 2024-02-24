@@ -1,11 +1,15 @@
 ﻿using AppWebBeachSA.Models;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Numerics;
+using System.Security.Claims;
 using static AppWebBeachSA.Controllers.ClientesController;
 
 namespace AppWebBeachSA.Controllers
@@ -16,6 +20,8 @@ namespace AppWebBeachSA.Controllers
         private HotelAPI apiHotel;
         private HttpClient httpClient;
         public static Cliente DatosPersona = new Cliente();
+        private static string EmailRestablecer = "";
+
 
         public ClientesController()
         {
@@ -198,6 +204,152 @@ namespace AppWebBeachSA.Controllers
         public IActionResult ObtenerInformacionPersona()
         {
             return View();
+        }
+
+
+        //Métodos autenticación
+
+
+        //Login
+        [HttpGet]
+        public IActionResult Login()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Login(Cliente cliente)
+        {
+            // Enviar la solicitud al API para autenticar al usuario
+            var response = await httpClient.PostAsJsonAsync("/Clientes/Login", cliente);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var resultado = await response.Content.ReadAsStringAsync();
+
+                if (resultado == "Debe restablecer contraseña")
+                {
+                    TempData["EmailRestablecer"] = cliente.Email;
+                    TempData["Mensaje"] = "Debe restablecer contraseña";
+                    return RedirectToAction("Restablecer");
+                }
+                else if (resultado == "Ha iniciado sesión")
+                {
+                    var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.Name, cliente.Email),
+            };
+
+                    var claimsIdentity = new ClaimsIdentity(claims, "Cookies");
+
+                    var authProperties = new AuthenticationProperties
+                    {
+                        IsPersistent = true,
+                    };                  
+
+                    return RedirectToAction("Index", "Home");
+                }
+                else
+                {
+                    TempData["Mensaje"] = "Error al iniciar sesión";
+                    return View();
+                }
+            }
+            else
+            {
+                TempData["Mensaje"] = "Error al iniciar sesión total";
+                return View();
+            }
+        }
+
+        private async Task<bool> VerificarRestablecer(Cliente temp)
+        {
+            bool verificado = false;
+
+            HttpResponseMessage response = await httpClient.GetAsync($"Clientes/BuscarCorreo?email={temp.Email}");
+
+            if (response.IsSuccessStatusCode)
+            {
+                var resultado = response.Content.ReadAsStringAsync().Result;
+                var cliente = JsonConvert.DeserializeObject<Cliente>(resultado);
+
+                if (cliente.Restablecer == 0)
+                {
+                    verificado = true;
+                }
+            }
+
+            return verificado;
+        }
+
+        [HttpGet]
+        public IActionResult Restablecer()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Restablecer(SeguridadRestablecer pRestablecer)
+        {
+
+            string emailRestablecer = TempData["EmailRestablecer"]?.ToString();
+
+            pRestablecer.Email = emailRestablecer;
+
+            if (!string.IsNullOrEmpty(emailRestablecer) && pRestablecer != null)
+            {
+                var response = await httpClient.PostAsJsonAsync($"/Clientes/Restablecer?email={emailRestablecer}", pRestablecer);
+
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var resultado = await response.Content.ReadAsStringAsync();
+
+                    if (resultado == "Restablecer contraseña: Éxito")
+                    {
+                        TempData["Mensaje"] = "Contraseña restablecida con éxito";
+                    }
+                    else
+                    {
+                        TempData["Mensaje"] = resultado;
+                    }
+
+                    return RedirectToAction("Login", "Clientes");
+                }
+                else
+                {
+                    TempData["Mensaje"] = "Error al restablecer la contraseña";
+                }
+            }
+            else
+            {
+                TempData["Mensaje"] = "Datos incorrectos";
+            }
+
+            return View();
+        }
+
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync();
+            HttpContext.Session.SetString("token", "");
+            return RedirectToAction("Login", "Clientes");
+        }
+
+        private AuthenticationHeaderValue AutorizacionToken()
+        {
+            var token = HttpContext.Session.GetString("token");
+
+            AuthenticationHeaderValue autorizacion = null;
+
+            if (token != null && token.Length != 0)
+            {
+                autorizacion = new AuthenticationHeaderValue("Bearer", token);
+            }
+
+            return autorizacion;
         }
 
     }

@@ -1,0 +1,55 @@
+﻿@model AppWebBeachSA.Models.Empleado
+
+@{
+    ViewData["Title"] = "Login";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Iniciar sesión</h1>
+@* formulario de autenticacion *@
+<div class="container">
+    <div class="row">
+
+        <div class="col-sm-4">
+        </div>
+
+        <div class="col-sm-4">
+            @if (TempData["Mensaje"] != null)
+            {
+                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    <strong>Mensaje</strong> @TempData["Mensaje"].
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            }
+
+            @if (TempData["MensajeSesion"] != null)
+            {
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <strong>Mensaje</strong> @TempData["MensajeSesion"].
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            }
+            <form asp-controller="Empleados" asp-action="Login" id="FormularioLogin">
+                <div class="form-group">
+                    <label asp-for="Email" class="form-label">Email</label>
+                    <input asp-for="Email" class="form-control" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Password" class="form-label">Password</label>
+                    <input asp-for="Password" class="form-control" />
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+
+                <div class="col-auto">
+                    <input type="submit" value="Aceptar" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
+
+        <div class="col-sm-4">
+        </div>
+
+    </div>
+</div>

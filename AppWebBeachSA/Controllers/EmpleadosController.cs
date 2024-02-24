@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 using System.Net.Http.Headers;
 using System.Net;
 using Newtonsoft.Json;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
+using System.Security.Claims;
 
 namespace AppWebBeachSA.Controllers
 {
@@ -186,6 +189,69 @@ namespace AppWebBeachSA.Controllers
 
             return RedirectToAction("Index");
         }
+
+
+        [HttpGet]
+        public IActionResult Login()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Login([Bind] Empleado empleado)
+        {
+            httpClient.DefaultRequestHeaders.Authorization = AutorizacionToken();
+
+            AutorizacionResponse autorizacion = null;
+
+            if (empleado == null)
+            {
+                TempData["Mensaje"] = "Usuario o contraseña incorrecta";
+
+                return View();
+            }
+
+            HttpResponseMessage response = await httpClient.PostAsync($"Empleados/AutenticarPW?email={empleado.Email}&password={empleado.Password}", null);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var resultado = response.Content.ReadAsStringAsync().Result;
+
+                autorizacion = JsonConvert.DeserializeObject<AutorizacionResponse>(resultado);
+            }
+
+            if (autorizacion != null)
+            {
+                var identity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme);
+
+                identity.AddClaim(new Claim(ClaimTypes.Name, empleado.Email));
+
+                var principal = new ClaimsPrincipal(identity);
+
+                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+
+                HttpContext.Session.SetString("token", autorizacion.Token);
+
+                return RedirectToAction("Index", "Home");
+
+            }
+            else
+            {
+                TempData["Mensaje"] = "Intente de nuevo";
+
+                return View(empleado);
+            }
+        }
+
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync();
+            HttpContext.Session.SetString("token", "");
+            return RedirectToAction("Login", "Empleados");
+        }
+
+
 
         private AuthenticationHeaderValue AutorizacionToken()
         {

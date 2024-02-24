@@ -39,5 +39,7 @@ namespace AppWebBeachSA.Models
         [Required]
         public char Estado { get; set; }
 
+
+
     }
 }

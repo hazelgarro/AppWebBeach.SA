@@ -20,3 +20,22 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+#FormularioLogin {
+    border: 1px solid #cDcDcD;
+    border-radius: 1em;
+    box-shadow: 5px 5px 5px #BDBDBD;
+    padding: 1em;
+}
+
+.Formularios {
+    margin: 0 auto;
+    width: auto;
+    text-align: left;
+    color: #393939;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    border: 1px solid #cDcDcD;
+    border-radius: 1em;
+    box-shadow: 5px 5px 5px #BDBDBD;
+    padding: 1em;
+}
