@@ -1,8 +1,81 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
-
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<!DOCTYPE html>
+<html lang="es">
+<head class="fondo">
+    <link rel="stylesheet" href="~/css/home.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/AppWebBeachSA.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/images/photo-one.webp" style="background-size: cover;">
+</head>
+<body>
+    <section>
+        <div class="container">
+            <div class="position-bienvenida">
+                <h4>Bienvenido a</h4>
+                <h1>Hotel Beach</h1>
+                <p>El lugar que mereces para tus vacaciones</p>
+            </div>
+            <div>
+                <button type="button" class="btn boton">Reservar &nbsp; <i class="fa-solid fa-arrow-right"></i></button>
+            </div>
+        </div>
+    </section>
+    <section>
+        <div class="container">
+            <div class="caracteristicas">
+                <h2 class="caracteristicas-text">Características principales</h2>
+                <p class="caracteristicas-text">Todo en el mismo hotel, para mejorar su experiencia vacacional</p>
+                <ul class="caracteristicas-icons">
+                    <li><img class="caracteristicas-img" src="./images/air-conditioner_svgrepo.com.svg" alt="Aire Acondicionado"><br>Aire acondicionado</li>
+                    <li><img class="caracteristicas-img" src="./images/wifi_svgrepo.com.svg" alt="WIFI"><br>WIFI</li>
+                    <li><img class="caracteristicas-img" src="./images/security-camera_svgrepo.com.svg" alt="Camaras de seguridad"><br>Seguridad</li>
+                    <li><img class="caracteristicas-img" src="./images/pool-stairs_svgrepo.com.svg" alt="Piscina"><br>Piscinas</li>
+                    <li><img class="caracteristicas-img" src="./images/drinks-holiday-sea-sky-travel-vacation-2_svgrepo.com.svg" alt="Bar"><br>Bar</li>
+                    <li><img class="caracteristicas-img" src="./images/food-dinner_svgrepo.com.svg" alt="Restaurante"><br>Restaurantes</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+    <section>
+        <div class="container" style="margin-bottom: 4rem;">
+            <div class="caracteristicas">
+                <h2 class="caracteristicas-text">Paquetes</h2>
+                <p class="caracteristicas-text mb-3">Diferentes opciones que se ajustan a tus gustos y necesidades</p>
+                <div class="cards-position mt-2 mb-5"> 
+                    <div>
+                        <h5 class="caracteristicas-text">Todo incluido</h5>
+                        <div class="card card-size">
+                            <div class="">
+                                <img src="./images/sauna.webp" class="card-img" alt="...">
+                                <p class="card-text">$450 por noche</p>
+                                <p class="card-text mt-2">cada persona</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <h5 class="caracteristicas-text">Alimentación</h5>
+                        <div class="card card-size">
+                            <div class="">
+                                <img src="./images/almuerzo.webp" class="card-img" alt="...">
+                                <p class="card-text">$275 por noche</p>
+                                <p class="card-text mt-2">cada persona</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <h5 class="caracteristicas-text">Hospedaje</h5>
+                        <div class="card card-size">
+                            <div class="">
+                                <img src="./images/cama.webp" class="card-img" alt="...">
+                                <p class="card-text">$210 por noche</p>
+                                <p class="card-text mt-2">cada persona</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+</html>

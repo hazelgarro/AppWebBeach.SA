@@ -1,0 +1,139 @@
+﻿body {
+    background-image: url('../images/photo-one.webp');
+    background-size: cover;
+}
+
+h1 {
+    color: darkcyan;
+    font-weight: 500;
+    font-size: xxx-large;
+}
+
+h4 {
+    font-weight: 100;
+}
+
+.position-bienvenida {
+    margin-top: 9rem;
+}
+
+.boton {
+    border: 1px solid black; 
+    border-radius: 50px;
+    background: none;
+    padding: 10px 20px; 
+    cursor: pointer;
+}
+
+.boton:hover {
+    border-color: darkcyan;
+    background: darkcyan;
+    font-weight:400;
+    color:white;
+}
+
+.caracteristicas {
+    background-color: rgba(255, 255, 255, 100);
+    border-radius: 1.5rem;
+    padding: 20px;
+    margin-top: 132px;
+    box-shadow: 0px 9px 58px 9px rgba(0,0,0,0.1);
+}
+
+.caracteristicas-icons {
+    list-style-type: none;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin: auto;
+    padding: inherit;
+    text-align: center;
+    font-weight: 400;
+}
+
+//flex-direction: column;
+
+.caracteristicas-img {
+    width: 50px;
+    height: auto;
+}
+
+.caracteristicas-text {
+    text-align: center;
+    margin: revert;
+}
+
+.cards-position {
+    display: flex;
+    justify-items: center;
+    justify-content: space-around;
+}
+
+.card-size {
+    width: 18rem;
+}
+
+.card-img {
+    width: 100%;
+    height: auto;
+}
+
+    .card-img:hover {
+        filter: opacity(0.5);
+        /*filter: grayscale(90%);*/
+    }
+
+.card-text {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    padding: 10px;
+    color: white;
+    border-radius: 1rem;
+    width: 100%;
+    transition: transform 0.3s ease;
+    opacity: 0;
+    text-align: center;
+    font-size: large;
+    font-weight: 500;
+}
+
+.card:hover .card-text {
+    transform: translateY(-140%);
+    opacity: 1;
+    color: black;
+    font-size: large;
+    font-weight: 500;
+    text-shadow: 2px 2px 2px 2px grey;
+}
+
+@media only screen and (min-width: 768px) and (max-width: 991px) {
+    .caracteristicas-icons {
+        flex-direction: column;
+    }
+
+    .cards-position {
+        flex-direction: column;
+    }
+
+    .card-size {
+        width: 39rem;
+    }
+}
+
+@media only screen and (max-width: 575px) {
+    .caracteristicas-icons {
+        flex-direction: column;
+    }
+
+    .cards-position {
+        flex-direction: column;
+        justify-items: center;
+    }
+
+    .card-size {
+        width: 21rem;
+        justify-items: center;
+        position: fixed;
+    }
+}
