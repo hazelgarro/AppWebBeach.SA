@@ -39,3 +39,7 @@ body {
     box-shadow: 5px 5px 5px #BDBDBD;
     padding: 1em;
 }
+
+.form-size {
+    width: 100% !important;
+}

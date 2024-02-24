@@ -1,0 +1,94 @@
+﻿@model AppWebBeachSA.Models.Cliente
+
+@{
+    ViewData["Title"] = "ConfirmarCliente";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="d-flex justify-content-center">
+    <h1 class="text-center text-uppercase">Consultar cliente</h1>
+</div>
+
+
+<div class="d-flex justify-content-center">
+    <div>
+        <div class="d-flex justify-content-center mb-5 mt-5">
+            <a asp-action="Index" asp-controller="Home" class="btn btn-outline-dark fw-semibold">
+                Volver
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-counterclockwise" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M8 3a5 5 0 1 1-4.546 2.914.5.5 0 0 0-.908-.417A6 6 0 1 0 8 2z" />
+                    <path d="M8 4.466V.534a.25.25 0 0 0-.41-.192L5.23 2.308a.25.25 0 0 0 0 .384l2.36 1.966A.25.25 0 0 0 8 4.466" />
+                </svg>
+            </a>
+        </div>
+
+        <div>
+            <form asp-action="ConfirmarCliente" asp-controller="Reservaciones" asp-route-id="#pCedula">
+                <div class="form-group">
+                    <label class="control-label fw-semibold fs-5 mt-2 mb-1 pe-5">Numero de cedula a consultar: </label>
+                    <input name="pCedula" class="form-control" />
+                </div>
+
+                <div class="form-group d-flex justify-content-center mt-4">
+                    <button type="submit" value="Buscar" class="btn btn-outline-info form-size fs-5 fw-semibold">Buscar</button>
+                </div>
+            </form>
+        </div>
+
+        @if (Model != null)
+        {
+            if (Model.NombreCompleto != null)
+            {
+                <div class="card form-size mt-4">
+                    <div class="card-header text-center">
+                        Cliente
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">Cédula: @Model.Cedula</li>
+                        <li class="list-group-item">Nombre: @Model.NombreCompleto</li>
+                        <li class="list-group-item">Tipo de cédula: @Model.TipoCedula</li>
+                        <li class="list-group-item">Teléfono: @Model.Telefono</li>
+                        <li class="list-group-item">
+                            Correo electrónico:
+                            <br />@Model.Email
+                        </li>
+                    </ul>
+                </div>
+
+                TempData["CedulaCliente"] = Model.Cedula;
+
+                <div class="form-size mt-4 d-flex justify-content-center">
+                    <a asp-action="Create" asp-controller="Reservaciones" class="btn btn-outline-dark fw-semibold">
+                        Continuar
+                    </a>
+                </div>
+
+            }
+            else
+            {
+                <div class="card form-size mt-4">
+                    <div class="card-header text-center">
+                        Cliente
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item text-center">Sin resultados</li>
+                    </ul>
+                </div>
+
+                <div class="form-size mt-4 d-flex justify-content-center">
+                    <a asp-action="Create" asp-controller="Clientes" class="btn btn-outline-dark fw-semibold">
+                        Crear cliente
+                    </a>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="form-size mt-5 d-flex justify-content-center">
+                <a asp-action="Create" asp-controller="Clientes" class="btn btn-outline-dark fw-semibold">
+                    Crear cliente
+                </a>
+            </div>
+        }
+    </div>
+</div>
