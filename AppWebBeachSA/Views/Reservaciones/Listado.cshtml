@@ -8,14 +8,14 @@
 <h1>Listado</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="ConfirmarCliente">Create New</a>
 </p>
 <table class="table">
     <thead>
         <tr>
-            <th>
+            @* <th>
                 @Html.DisplayNameFor(model => model.Id)
-            </th>
+            </th> *@
             <th>
                 @Html.DisplayNameFor(model => model.CedulaCliente)
             </th>
@@ -28,7 +28,7 @@
             <th>
                 @Html.DisplayNameFor(model => model.Duracion)
             </th>
-            <th>
+            @* <th>
                 @Html.DisplayNameFor(model => model.Subtotal)
             </th>
             <th>
@@ -36,28 +36,28 @@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Descuento)
-            </th>
+            </th> *@
             <th>
                 @Html.DisplayNameFor(model => model.MontoTotal)
             </th>
-            <th>
+            @* <th>
                 @Html.DisplayNameFor(model => model.Adelanto)
-            </th>
+            </th> *@
             <th>
                 @Html.DisplayNameFor(model => model.MontoMensualidad)
             </th>
-            <th>
+            @* <th>
                 @Html.DisplayNameFor(model => model.Estado)
-            </th>
+            </th> *@
             <th></th>
         </tr>
     </thead>
     <tbody>
 @foreach (var item in Model) {
         <tr>
-            <td>
+            @* <td>
                 @Html.DisplayFor(modelItem => item.Id)
-            </td>
+            </td> *@
             <td>
                 @Html.DisplayFor(modelItem => item.CedulaCliente)
             </td>
@@ -70,7 +70,7 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Duracion)
             </td>
-            <td>
+            @* <td>
                 @Html.DisplayFor(modelItem => item.Subtotal)
             </td>
             <td>
@@ -78,23 +78,23 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Descuento)
-            </td>
+            </td> *@
             <td>
                 @Html.DisplayFor(modelItem => item.MontoTotal)
             </td>
-            <td>
+            @* <td>
                 @Html.DisplayFor(modelItem => item.Adelanto)
-            </td>
+            </td> *@
             <td>
                 @Html.DisplayFor(modelItem => item.MontoMensualidad)
             </td>
-            <td>
+            @* <td>
                 @Html.DisplayFor(modelItem => item.Estado)
-            </td>
+            </td> *@
             <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
                 @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                @Html.ActionLink("Delete", "Delete", new { id=item.Id })
             </td>
         </tr>
 }
