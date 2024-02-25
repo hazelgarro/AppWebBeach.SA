@@ -13,7 +13,9 @@ namespace AppWebBeachSA.Models
 
         public string TipoPago { get; set; }
 
-        public DateOnly FechaReserva { get; set; }
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:d}")]
+        [DataType(DataType.Date)]
+        public DateTime FechaReserva { get; set; }
 
         public int Duracion { get; set; }
 

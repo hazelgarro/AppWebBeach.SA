@@ -19,6 +19,7 @@ namespace AppWebBeachSA.Controllers
             hotelAPI = new HotelAPI();
 
             client = hotelAPI.Initial();
+
         }
 
         /// <summary>
@@ -27,6 +28,8 @@ namespace AppWebBeachSA.Controllers
         /// <returns></returns>
         public async Task<IActionResult> Listado()
         {
+            ViewBag.ListaPaquetes = await GetPaquetes();
+
             List<Reservacion> listado = new List<Reservacion>();
 
             HttpResponseMessage response = await client.GetAsync("/Reservaciones/ListaReservas");
@@ -37,6 +40,8 @@ namespace AppWebBeachSA.Controllers
 
                 listado = JsonConvert.DeserializeObject<List<Reservacion>>(resultados);
             }
+
+            //ViewBag.ListaPaquetesListado = await GetPaquetes();
 
             return View(listado);
         }
@@ -106,10 +111,7 @@ namespace AppWebBeachSA.Controllers
             pReservacion.Id = await GetNumReserva();
             pReservacion.Estado = 'A';
 
-            var agregar = client.PostAsJsonAsync<Reservacion>("/Reservaciones/AgregarReserva", pReservacion);
-            await agregar;
-
-            var resultado = agregar.Result;
+            HttpResponseMessage resultado = await client.PostAsJsonAsync<Reservacion>("/Reservaciones/AgregarReserva", pReservacion);
 
             if (resultado.StatusCode == HttpStatusCode.OK)
             {
@@ -141,6 +143,8 @@ namespace AppWebBeachSA.Controllers
         [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
+            ViewBag.ListaPaquetes = await GetPaquetes();
+
             var reserva = new Reservacion();
 
             HttpResponseMessage response = await client.GetAsync($"Reservaciones/BuscarReserva?id={id}");
@@ -152,7 +156,7 @@ namespace AppWebBeachSA.Controllers
                 reserva = JsonConvert.DeserializeObject<Reservacion>(resultado);
             }
 
-            ViewBag.ListaPaquetes = await GetPaquetes();
+            //ViewBag.ListaPaquetesEditar = await GetPaquetes();
             return View(reserva);
         }
 

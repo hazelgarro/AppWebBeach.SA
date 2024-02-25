@@ -58,6 +58,12 @@
             </div>
 
             <div class="form-group">
+                <label asp-for="FechaReserva" class="control-label fw-semibold fs-5 mt-2 mb-1">Seleccione la fecha que desea reservar:</label>
+                <input asp-for="FechaReserva" class="form-control" />
+                <span asp-validation-for="FechaReserva" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
                 <label asp-for="Duracion" class="control-label fw-semibold fs-5 mt-2 mb-1">Duración de la estadía: </label>
                 <input asp-for="Duracion" class="form-control" />
                 <span asp-validation-for="Duracion" class="text-danger"></span>

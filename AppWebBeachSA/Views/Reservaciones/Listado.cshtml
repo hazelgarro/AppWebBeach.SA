@@ -19,9 +19,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.CedulaCliente)
             </th>
-            <th>
+            @* <th>
                 @Html.DisplayNameFor(model => model.IdPaquete)
-            </th>
+            </th> *@
             <th>
                 @Html.DisplayNameFor(model => model.TipoPago)
             </th>
@@ -54,6 +54,9 @@
     </thead>
     <tbody>
 @foreach (var item in Model) {
+
+        var modalID = "R" + item.Id;
+
         <tr>
             @* <td>
                 @Html.DisplayFor(modelItem => item.Id)
@@ -61,9 +64,9 @@
             <td>
                 @Html.DisplayFor(modelItem => item.CedulaCliente)
             </td>
-            <td>
+            @* <td>
                 @Html.DisplayFor(modelItem => item.IdPaquete)
-            </td>
+            </td> *@
             <td>
                 @Html.DisplayFor(modelItem => item.TipoPago)
             </td>
@@ -93,10 +96,60 @@
             </td> *@
             <td>
                 @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                <button type="button" data-bs-toggle="modal" data-bs-target="#@modalID">Details</button> |
                 @Html.ActionLink("Delete", "Delete", new { id=item.Id })
             </td>
         </tr>
 }
     </tbody>
 </table>
+
+
+@foreach(var reserva in Model)
+{
+    var modalID = "R" + reserva.Id;
+    string nombrePack = " ";
+
+    foreach (var item in ViewBag.ListaPaquetes)
+    {
+        if (item.ID == reserva.IdPaquete)
+        {
+            nombrePack = item.NombrePaquete;
+        }
+    }
+
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal fade" id="@modalID" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Detalles de la reservación: </h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="card">
+                            <div class="card-header text-center">
+                                @reserva.CedulaCliente
+                            </div>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item">Tipo de paquete adquirido: @nombrePack</li>
+                                <li class="list-group-item">Subtotal: @reserva.Subtotal</li>
+                                <li class="list-group-item">Impuesto IVA: @reserva.Impuesto</li>
+                                @if (reserva.Descuento > 0)
+                                {
+                                    <li class="list-group-item">Descuento aplicado: @reserva.Descuento</li>
+                                }
+                                <li class="list-group-item">Monto total a pagar: @reserva.MontoTotal</li>
+                                <li class="list-group-item">Monto de adelanto: @reserva.Adelanto</li>
+                                <li class="list-group-item">Monto de mensualidad: @reserva.MontoMensualidad</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
