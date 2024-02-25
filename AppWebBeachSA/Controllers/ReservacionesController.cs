@@ -28,8 +28,6 @@ namespace AppWebBeachSA.Controllers
         /// <returns></returns>
         public async Task<IActionResult> Listado()
         {
-            ViewBag.ListaPaquetes = await GetPaquetes();
-
             List<Reservacion> listado = new List<Reservacion>();
 
             HttpResponseMessage response = await client.GetAsync("/Reservaciones/ListaReservas");
@@ -41,9 +39,13 @@ namespace AppWebBeachSA.Controllers
                 listado = JsonConvert.DeserializeObject<List<Reservacion>>(resultados);
             }
 
-            //ViewBag.ListaPaquetesListado = await GetPaquetes();
+            ReservacionPaqueteLista listas = new ReservacionPaqueteLista();
 
-            return View(listado);
+            listas.ListaReservaciones = listado;
+
+            listas.ListaPaquetes = await GetPaquetes();
+
+            return View(listas);
         }
 
 
@@ -143,8 +145,6 @@ namespace AppWebBeachSA.Controllers
         [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
-            ViewBag.ListaPaquetes = await GetPaquetes();
-
             var reserva = new Reservacion();
 
             HttpResponseMessage response = await client.GetAsync($"Reservaciones/BuscarReserva?id={id}");
@@ -156,7 +156,7 @@ namespace AppWebBeachSA.Controllers
                 reserva = JsonConvert.DeserializeObject<Reservacion>(resultado);
             }
 
-            //ViewBag.ListaPaquetesEditar = await GetPaquetes();
+            ViewBag.ListaPaquetes = await GetPaquetes();
             return View(reserva);
         }
 

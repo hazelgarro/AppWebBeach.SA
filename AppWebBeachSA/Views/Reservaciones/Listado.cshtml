@@ -1,4 +1,4 @@
-﻿@model IEnumerable<AppWebBeachSA.Models.Reservacion>
+﻿@model AppWebBeachSA.Models.ReservacionPaqueteLista
 
 @{
     ViewData["Title"] = "Listado";
@@ -10,107 +10,72 @@
 <p>
     <a asp-action="ConfirmarCliente">Create New</a>
 </p>
+
 <table class="table">
     <thead>
         <tr>
-            @* <th>
-                @Html.DisplayNameFor(model => model.Id)
-            </th> *@
             <th>
-                @Html.DisplayNameFor(model => model.CedulaCliente)
-            </th>
-            @* <th>
-                @Html.DisplayNameFor(model => model.IdPaquete)
-            </th> *@
-            <th>
-                @Html.DisplayNameFor(model => model.TipoPago)
+                @Html.DisplayNameFor(model => model.ListaReservaciones.First().CedulaCliente)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Duracion)
-            </th>
-            @* <th>
-                @Html.DisplayNameFor(model => model.Subtotal)
+                @Html.DisplayNameFor(model => model.ListaReservaciones.First().TipoPago)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Impuesto)
+                @Html.DisplayNameFor(model => model.ListaReservaciones.First().FechaReserva)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Descuento)
-            </th> *@
-            <th>
-                @Html.DisplayNameFor(model => model.MontoTotal)
+                @Html.DisplayNameFor(model => model.ListaReservaciones.First().Duracion)
             </th>
-            @* <th>
-                @Html.DisplayNameFor(model => model.Adelanto)
-            </th> *@
             <th>
-                @Html.DisplayNameFor(model => model.MontoMensualidad)
+                @Html.DisplayNameFor(model => model.ListaReservaciones.First().MontoTotal)
             </th>
-            @* <th>
-                @Html.DisplayNameFor(model => model.Estado)
-            </th> *@
+            <th>
+                @Html.DisplayNameFor(model => model.ListaReservaciones.First().MontoMensualidad)
+            </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+        @foreach (var item in Model.ListaReservaciones)
+        {
 
         var modalID = "R" + item.Id;
 
-        <tr>
-            @* <td>
-                @Html.DisplayFor(modelItem => item.Id)
-            </td> *@
-            <td>
+            <tr>
+                <td>
                 @Html.DisplayFor(modelItem => item.CedulaCliente)
-            </td>
-            @* <td>
-                @Html.DisplayFor(modelItem => item.IdPaquete)
-            </td> *@
-            <td>
+                </td>
+                <td>
                 @Html.DisplayFor(modelItem => item.TipoPago)
-            </td>
-            <td>
+                </td>
+                <td>
+                @Html.DisplayFor(modelItem => item.FechaReserva)
+                </td>
+                <td>
                 @Html.DisplayFor(modelItem => item.Duracion)
-            </td>
-            @* <td>
-                @Html.DisplayFor(modelItem => item.Subtotal)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Impuesto)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Descuento)
-            </td> *@
-            <td>
+                </td>
+                <td>
                 @Html.DisplayFor(modelItem => item.MontoTotal)
-            </td>
-            @* <td>
-                @Html.DisplayFor(modelItem => item.Adelanto)
-            </td> *@
-            <td>
+                </td>
+                <td>
                 @Html.DisplayFor(modelItem => item.MontoMensualidad)
-            </td>
-            @* <td>
-                @Html.DisplayFor(modelItem => item.Estado)
-            </td> *@
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-                <button type="button" data-bs-toggle="modal" data-bs-target="#@modalID">Details</button> |
-                @Html.ActionLink("Delete", "Delete", new { id=item.Id })
-            </td>
-        </tr>
-}
+                </td>
+                <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                    <button type="button" data-bs-toggle="modal" data-bs-target="#@modalID">Details</button> |
+                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
 
-
-@foreach(var reserva in Model)
+@foreach(var reserva in Model.ListaReservaciones)
 {
     var modalID = "R" + reserva.Id;
     string nombrePack = " ";
 
-    foreach (var item in ViewBag.ListaPaquetes)
+    foreach (var item in Model.ListaPaquetes)
     {
         if (item.ID == reserva.IdPaquete)
         {

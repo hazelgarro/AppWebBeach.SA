@@ -58,7 +58,7 @@
 
             <div class="form-group">
                 <label asp-for="FechaReserva" class="control-label fw-semibold fs-5 mt-2 mb-1">Seleccione la fecha que desea reservar:</label>
-                <input asp-for="FechaReserva" class="form-control" />
+                <input asp-for="FechaReserva" class="form-control" id="FechaReservaInput"/>
                 <span asp-validation-for="FechaReserva" class="text-danger"></span>
             </div>
 
@@ -97,5 +97,14 @@
                 break;
             }
         }
+    });
+
+    document.addEventListener("DOMContentLoaded", function () {
+        var fechaReserva = new Date('@Model.FechaReserva');
+        var fechaReservaInput = document.getElementById("FechaReservaInput");
+
+        var formattedFechaReserva = fechaReserva.toISOString().split('T')[0];
+
+        fechaReservaInput.value = formattedFechaReserva;
     });
 </script>
