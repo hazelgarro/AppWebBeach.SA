@@ -11,6 +11,8 @@ namespace AppWebBeachSA.Controllers
 
         private HttpClient client;
 
+        public static TipoCambio tipoCambio = null;
+
         /// <summary>
         /// Metodo constructor
         /// </summary>
@@ -28,6 +30,11 @@ namespace AppWebBeachSA.Controllers
         /// <returns></returns>
         public async Task<IActionResult> Listado()
         {
+
+            TempData["tipoCambio"] = null;
+
+            extraerTipoCambio();
+
             List<Reservacion> listado = new List<Reservacion>();
 
             HttpResponseMessage response = await client.GetAsync("/Reservaciones/ListaReservas");
@@ -310,5 +317,23 @@ namespace AppWebBeachSA.Controllers
 
             return ultimoId + 1;
         }
+
+        private async void extraerTipoCambio()
+        {
+
+            HttpResponseMessage response = client.GetAsync("https://apis.gometa.org/tdc/tdc.json").Result;
+
+            if (response.IsSuccessStatusCode)
+            {
+                var result = response.Content.ReadAsStringAsync().Result;
+                tipoCambio = JsonConvert.DeserializeObject<TipoCambio>(result);
+                decimal precio = tipoCambio.venta;
+                TempData["tipoCambio"] = precio;
+                //TempData.Keep("tipoCambio");
+            }
+
+
+        }
+
     }
 }
