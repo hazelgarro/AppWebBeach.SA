@@ -70,7 +70,7 @@ namespace AppWebBeachSA.Controllers
 
             if (resultado.IsSuccessStatusCode)
             {
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", "Home");
             }
             else
             {
@@ -221,20 +221,7 @@ namespace AppWebBeachSA.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(Cliente cliente)
         {
-            HttpResponseMessage lista = await httpClient.GetAsync("Clientes/Listado");
-            if (lista.IsSuccessStatusCode)
-            {
-                string content = await lista.Content.ReadAsStringAsync();
 
-                List<Cliente> listaClientes = JsonConvert.DeserializeObject<List<Cliente>>(content);
-
-                Cliente clienteBuscado = listaClientes.FirstOrDefault(e => e.Email == cliente.Email);
-                cliente.TipoUsuario = clienteBuscado.TipoUsuario;
-                cliente.Cedula = clienteBuscado.Cedula;
-                cliente.Restablecer = clienteBuscado.Restablecer;
-            }
-
-            httpClient.DefaultRequestHeaders.Authorization = AutorizacionToken();
             AutorizacionResponse autorizacion = null;
 
             if (cliente == null)
@@ -253,6 +240,28 @@ namespace AppWebBeachSA.Controllers
 
             if (autorizacion != null)
             {
+                HttpContext.Session.SetString("token", autorizacion.Token);
+
+                var authProperties = new AuthenticationProperties
+                {
+                    IsPersistent = true,
+                };
+
+                httpClient.DefaultRequestHeaders.Authorization = AutorizacionToken();
+
+                HttpResponseMessage clientInfo = await httpClient.GetAsync($"Clientes/ClienteLogin?email={cliente.Email}");
+
+                if (clientInfo.StatusCode == HttpStatusCode.OK)
+                {
+                    var resultadoClient = clientInfo.Content.ReadAsStringAsync().Result;
+
+                    Cliente clienteBuscado = JsonConvert.DeserializeObject<Cliente>(resultadoClient);
+
+                    cliente.TipoUsuario = clienteBuscado.TipoUsuario;
+                    cliente.Cedula = clienteBuscado.Cedula;
+                    cliente.Restablecer = clienteBuscado.Restablecer;
+                }
+
                 if (cliente.Restablecer == 0)
                 {
                     TempData["EmailRestablecer"] = cliente.Email;
@@ -270,13 +279,6 @@ namespace AppWebBeachSA.Controllers
                     var principal = new ClaimsPrincipal(identity);
                     await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
 
-                    HttpContext.Session.SetString("token", autorizacion.Token);
-
-                    var authProperties = new AuthenticationProperties
-                    {
-                        IsPersistent = true,
-                    };
-
                     return RedirectToAction("Index", "Home");
                 }
                 else
@@ -287,7 +289,7 @@ namespace AppWebBeachSA.Controllers
             }
             else
             {
-                TempData["Mensaje"] = "Error al iniciar sesión total";
+                TempData["Mensaje"] = "Usuario o contraseña incorrecta";
                 return View();
             }
         }
