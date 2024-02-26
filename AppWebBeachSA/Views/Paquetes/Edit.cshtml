@@ -4,6 +4,10 @@
     ViewData["Title"] = "Edit";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<head>
+    <link rel="stylesheet" href="~/css/forms.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/AppWebBeachSA.styles.css" asp-append-version="true" />
+</head>
 
 <h1>Edit</h1>
 
@@ -14,44 +18,47 @@
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="NombrePaquete" class="control-label"></label>
-                <input asp-for="NombrePaquete" class="form-control" />
+                <label asp-for="NombrePaquete" class="control-label">Paquete</label>
+                <input asp-for="NombrePaquete" class="form-control input" />
                 <span asp-validation-for="NombrePaquete" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Precio" class="control-label"></label>
-                <input asp-for="Precio" class="form-control" />
+                <input asp-for="Precio" class="form-control input" />
                 <span asp-validation-for="Precio" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="PorcentajePrima" class="control-label"></label>
-                <input asp-for="PorcentajePrima" class="form-control" />
+                <label asp-for="PorcentajePrima" class="control-label">Porcentaje de prima</label>
+                <input asp-for="PorcentajePrima" class="form-control input" />
                 <span asp-validation-for="PorcentajePrima" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="LimiteMeses" class="control-label"></label>
-                <input asp-for="LimiteMeses" class="form-control" />
+                <label asp-for="LimiteMeses" class="control-label">Limite de meses</label>
+                <input asp-for="LimiteMeses" class="form-control input" />
                 <span asp-validation-for="LimiteMeses" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="FechaRegistro" class="control-label"></label>
-                <input asp-for="FechaRegistro" class="form-control" />
+                <label asp-for="FechaRegistro" class="control-label">Fecha registro</label>
+                <input asp-for="FechaRegistro" class="form-control input" />
                 <span asp-validation-for="FechaRegistro" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Estado" class="control-label"></label>
-                <input asp-for="Estado" class="form-control" />
+                <input asp-for="Estado" class="form-control input" />
                 <span asp-validation-for="Estado" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+            <div class="form-group pt-3 d-flex justify-content-between">
+                <a class="btn boton" asp-action="Index">
+                    Volver
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-counterclockwise" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M8 3a5 5 0 1 1-4.546 2.914.5.5 0 0 0-.908-.417A6 6 0 1 0 8 2z" />
+                        <path d="M8 4.466V.534a.25.25 0 0 0-.41-.192L5.23 2.308a.25.25 0 0 0 0 .384l2.36 1.966A.25.25 0 0 0 8 4.466" />
+                    </svg>
+                </a>
+                <input type="submit" value="Guardar" class="btn boton" />
             </div>
         </form>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {

@@ -21,10 +21,32 @@ body {
   margin-bottom: 60px;
 }
 
+h1 {
+    color: darkcyan;
+    font-family: "Poppins", sans-serif;
+    font-weight: 600;
+    font-style: normal;
+}
+
+h4 {
+    font-family: "Poppins", sans-serif;
+    font-weight: 300;
+    font-style: normal;
+}
+
+h5 {
+    font-family: "Poppins", sans-serif;
+    font-weight: 500;
+    font-style: normal;
+}
+
+p, li, h6, label, td, input, option, select, dt,dd{
+    font-family: "Poppins", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
 #FormularioLogin {
-    border: 1px solid #cDcDcD;
-    border-radius: 1em;
-    box-shadow: 5px 5px 5px #BDBDBD;
     padding: 1em;
 }
 
@@ -46,7 +68,9 @@ body {
 
 a {
     color: black;
-    font-weight: 300;
+    font-family: "Poppins", sans-serif;
+    font-weight: 400;
+    font-style: normal;
 }
 
     a:hover {
@@ -93,3 +117,4 @@ a {
 }
 
 ///Fonts
+

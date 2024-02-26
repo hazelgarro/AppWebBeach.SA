@@ -4,6 +4,10 @@
     ViewData["Title"] = "Edit";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<head>
+    <link rel="stylesheet" href="~/css/forms.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/AppWebBeachSA.styles.css" asp-append-version="true" />
+</head>
 
 <h1>Editar</h1>
 
@@ -15,72 +19,69 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group mb-3">
                 <label asp-for="Cedula" class="control-label"></label>
-                <input asp-for="Cedula" class="form-control" value="@Model.Cedula" readonly/>
+                <input asp-for="Cedula" class="form-control input" value="@Model.Cedula" readonly />
                 <span asp-validation-for="Cedula" class="text-danger"></span>
             </div>
             <div class="form-group mb-3">
-                <label asp-for="TipoCedula" class="control-label"></label>
-                <input asp-for="TipoCedula" class="form-control" value="@Model.TipoCedula" readonly />
+                <label asp-for="TipoCedula" class="control-label">Tipo de cedula</label>
+                <input asp-for="TipoCedula" class="form-control input" value="@Model.TipoCedula" readonly />
                 <span asp-validation-for="TipoCedula" class="text-danger"></span>
             </div>
             <div class="form-group mb-3">
-                <label asp-for="NombreCompleto" class="control-label"></label>
-                <input asp-for="NombreCompleto" class="form-control" value="@Model.NombreCompleto" />
+                <label asp-for="NombreCompleto" class="control-label">Nombre</label>
+                <input asp-for="NombreCompleto" class="form-control input" value="@Model.NombreCompleto" />
                 <span asp-validation-for="NombreCompleto" class="text-danger"></span>
             </div>
             <div class="form-group mb-3">
                 <label asp-for="Telefono" class="control-label"></label>
-                <input asp-for="Telefono" class="form-control" value="@Model.Telefono" />
+                <input asp-for="Telefono" class="form-control input" value="@Model.Telefono" />
                 <span asp-validation-for="Telefono" class="text-danger"></span>
             </div>
             <div class="form-group mb-3">
                 <label asp-for="Direccion" class="control-label"></label>
-                <input asp-for="Direccion" class="form-control" value="@Model.Direccion" />
+                <input asp-for="Direccion" class="form-control input" value="@Model.Direccion" />
                 <span asp-validation-for="Direccion" class="text-danger"></span>
             </div>
             <div class="form-group mb-3">
                 <label asp-for="Email" class="control-label"></label>
-                <input asp-for="Email" class="form-control" value="@Model.Email" />
+                <input asp-for="Email" class="form-control input" value="@Model.Email" />
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
             <div class="form-group mb-3">
                 <label asp-for="Password" class="control-label"></label>
-                <input asp-for="Password" class="form-control" value="@Model.Password" />
+                <input asp-for="Password" class="form-control input" value="@Model.Password" />
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
             <div class="form-group mb-3">
-                <label asp-for="TipoUsuario" class="control-label"></label>
-                <input asp-for="TipoUsuario" class="form-control" value="@Model.TipoUsuario" readonly />
+                <label asp-for="TipoUsuario" class="control-label">Tipo de usuraio</label>
+                <input asp-for="TipoUsuario" class="form-control input" value="@Model.TipoUsuario" readonly />
                 <span asp-validation-for="TipoUsuario" class="text-danger"></span>
             </div>
             <div class="form-group mb-3">
                 <label asp-for="Restablecer" class="control-label"></label>
-                <input asp-for="Restablecer" class="form-control" value="@Model.Restablecer" readonly />
+                <input asp-for="Restablecer" class="form-control input" value="@Model.Restablecer" readonly />
                 <span asp-validation-for="Restablecer" class="text-danger"></span>
             </div>
             <div class="form-group mb-3">
-                <label asp-for="FechaRegistro" class="control-label"></label>
-                <input asp-for="FechaRegistro" class="form-control" value="@Model.FechaRegistro.ToString("yyyy-MM-ddTHH:mm:ss")" readonly />
+                <label asp-for="FechaRegistro" class="control-label">Fecha registro</label>
+                <input asp-for="FechaRegistro" class="form-control input" value="@Model.FechaRegistro.ToString("yyyy-MM-ddTHH:mm:ss")" readonly />
                 <span asp-validation-for="FechaRegistro" class="text-danger"></span>
             </div>
             <div class="form-group mb-3">
                 <label asp-for="Estado" class="control-label"></label>
-                <input asp-for="Estado" class="form-control" value="@Model.Estado" readonly />
+                <input asp-for="Estado" class="form-control input" value="@Model.Estado" readonly />
                 <span asp-validation-for="Estado" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Guardar" class="btn btn-success mt-4 mb-4" />
+            <div class="form-group pt-3 d-flex justify-content-between">
+                <a asp-action="Index" asp-controller="Clientes" class="btn boton">
+                    Volver
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-counterclockwise" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M8 3a5 5 0 1 1-4.546 2.914.5.5 0 0 0-.908-.417A6 6 0 1 0 8 2z" />
+                        <path d="M8 4.466V.534a.25.25 0 0 0-.41-.192L5.23 2.308a.25.25 0 0 0 0 .384l2.36 1.966A.25.25 0 0 0 8 4.466" />
+                    </svg>
+                </a>
+                <input type="submit" value="Guardar" class="btn boton" />
             </div>
         </form>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index" asp-controller="Clientes" class="btn btn-outline-dark fw-semibold">
-        Volver
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-counterclockwise" viewBox="0 0 16 16">
-            <path fill-rule="evenodd" d="M8 3a5 5 0 1 1-4.546 2.914.5.5 0 0 0-.908-.417A6 6 0 1 0 8 2z" />
-            <path d="M8 4.466V.534a.25.25 0 0 0-.41-.192L5.23 2.308a.25.25 0 0 0 0 .384l2.36 1.966A.25.25 0 0 0 8 4.466" />
-        </svg>
-    </a>
 </div>

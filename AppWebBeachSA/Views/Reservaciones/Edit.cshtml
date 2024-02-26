@@ -5,6 +5,12 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+
+<head>
+    <link rel="stylesheet" href="~/css/forms.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/AppWebBeachSA.styles.css" asp-append-version="true" />
+</head>
+
 <div class="d-flex justify-content-center">
     <div>
         <h1 class="text-center text-uppercase">Editar</h1>
@@ -14,30 +20,20 @@
 </div>
 
 <hr />
-<div class="d-flex justify-content-center">
-    <div>
-        <div class="d-flex justify-content-center mb-2">
-            <a asp-action="Index" asp-controller="Home" class="btn btn-outline-dark fw-semibold">
-                Volver
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-counterclockwise" viewBox="0 0 16 16">
-                    <path fill-rule="evenodd" d="M8 3a5 5 0 1 1-4.546 2.914.5.5 0 0 0-.908-.417A6 6 0 1 0 8 2z" />
-                    <path d="M8 4.466V.534a.25.25 0 0 0-.41-.192L5.23 2.308a.25.25 0 0 0 0 .384l2.36 1.966A.25.25 0 0 0 8 4.466" />
-                </svg>
-            </a>
-        </div>
-
+<div class="row">
+    <div class="col-md-4">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-            <div class="form-group">
+            <div class="form-group mb-3">
                 <label asp-for="CedulaCliente" class="control-label fw-semibold fs-5 mb-1">Número de cédula: </label>
-                <input asp-for="CedulaCliente" class="form-control" readonly/>
+                <input asp-for="CedulaCliente" class="form-control input" readonly />
                 <span asp-validation-for="CedulaCliente" class="text-danger"></span>
             </div>
 
-            <div class="form-group">
+            <div class="form-group mb-3">
                 <label asp-for="IdPaquete" class="control-label fw-semibold fs-5 mt-2 mb-1">Seleccione el paquete que desea adquirir: </label>
-                <select asp-for="IdPaquete" class="form-select" id="IdPaqueteSelect">
+                <select asp-for="IdPaquete" class="form-select input" id="IdPaqueteSelect">
                     @foreach (var paquete in ViewBag.ListaPaquetes)
                     {
                         <option value="@paquete.ID">@paquete.NombrePaquete</option>
@@ -46,9 +42,9 @@
                 <span asp-validation-for="IdPaquete" class="text-danger"></span>
             </div>
 
-            <div class="form-group">
+            <div class="form-group mb-3">
                 <label asp-for="TipoPago" class="control-label fw-semibold fs-5 mt-2 mb-1">Seleccione el método de pago: </label>
-                <select asp-for="TipoPago" class="form-select" id="TipoPagoSelect">
+                <select asp-for="TipoPago" class="form-select input" id="TipoPagoSelect">
                     <option value="Cheque">Cheque</option>
                     <option value="Tarjeta">Tarjeta</option>
                     <option value="Efectivo">Efectivo</option>
@@ -56,18 +52,25 @@
                 <span asp-validation-for="TipoPago" class="text-danger"></span>
             </div>
 
-            <div class="form-group">
+            <div class="form-group mb-3">
                 <label asp-for="FechaReserva" class="control-label fw-semibold fs-5 mt-2 mb-1">Seleccione la fecha que desea reservar:</label>
-                <input asp-for="FechaReserva" class="form-control" id="FechaReservaInput"/>
+                <input asp-for="FechaReserva" class="form-control input" id="FechaReservaInput" />
                 <span asp-validation-for="FechaReserva" class="text-danger"></span>
             </div>
 
-            <div class="form-group">
+            <div class="form-group mb-3">
                 <label asp-for="Duracion" class="control-label fw-semibold fs-5 mt-2 mb-1">Duración de la estadía: </label>
-                <input asp-for="Duracion" class="form-control" />
+                <input asp-for="Duracion" class="form-control input" />
                 <span asp-validation-for="Duracion" class="text-danger"></span>
             </div>
-            <div class="form-group d-flex justify-content-center mt-4">
+            <div class="form-group pt-3 d-flex justify-content-between">
+                <a asp-action="Index" asp-controller="Home" class="btn btn-outline-dark fw-semibold">
+                    Volver
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-counterclockwise" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M8 3a5 5 0 1 1-4.546 2.914.5.5 0 0 0-.908-.417A6 6 0 1 0 8 2z" />
+                        <path d="M8 4.466V.534a.25.25 0 0 0-.41-.192L5.23 2.308a.25.25 0 0 0 0 .384l2.36 1.966A.25.25 0 0 0 8 4.466" />
+                    </svg>
+                </a>
                 <input type="submit" value="Save" class="btn btn-outline-success form-size fs-5 fw-semibold" />
             </div>
         </form>

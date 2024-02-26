@@ -1,46 +1,61 @@
-﻿
-@{
-    ViewData["Title"] = "ObtenerInformacionPersona";
+﻿@{
+    ViewData["Title"] = "Buscar";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<head class="fondo">
+    <link rel="stylesheet" href="~/css/login.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/AppWebBeachSA.styles.css" asp-append-version="true" />
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-4">
+            </div>
+            <div class="col-sm-4 bg-color">
+                <div class="d-flex justify-content-center">
+                    <div>
+                        <h1 class="text-center text-uppercase">Buscar</h1>
 
-<div class="d-flex justify-content-center">
-    <div>
-        <h1 class="text-center text-uppercase">Buscar</h1>
-
-        <h4 class="text-center">información de persona</h4>
-    </div>
-</div>
-
-<hr />
-
-<div class="d-flex justify-content-center">
-    <div>
-        <div class="d-flex justify-content-center mb-2">
-            <a asp-action="Index" asp-controller="Home" class="btn btn-outline-dark fw-semibold">
-                Volver
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-counterclockwise" viewBox="0 0 16 16">
-                    <path fill-rule="evenodd" d="M8 3a5 5 0 1 1-4.546 2.914.5.5 0 0 0-.908-.417A6 6 0 1 0 8 2z" />
-                    <path d="M8 4.466V.534a.25.25 0 0 0-.41-.192L5.23 2.308a.25.25 0 0 0 0 .384l2.36 1.966A.25.25 0 0 0 8 4.466" />
-                </svg>
-            </a>
-        </div>
-        <div class="">
-            <div class="">
-                <form asp-action="ObtenerInformacionPersona" method="post" id="formCedula">
-                    <div class="form-group">
-                        <label for="cedula" class="control-label">Cédula:</label>
-                        <input type="text" id="cedula" name="cedula" class="form-control" placeholder="Ingresa la cédula" maxlength="9" minlength="9" />
+                        <h4 class="text-center">información de persona</h4>
                     </div>
-                    <div class="form-group d-flex justify-content-center mt-4">
-                        <input type="submit" value="Buscar" class="btn btn-outline-success form-size fs-5 fw-semibold" />
+                </div>
+
+                <hr />
+
+                <div class="d-flex justify-content-center">
+                    <div>
+                        <div class="d-flex justify-content-center mb-2">
+                        </div>
+                        <div class="">
+                            <div class="">
+                                <form asp-action="ObtenerInformacionPersona" method="post" id="formCedula">
+                                    <div class="form-group">
+                                        <label for="cedula" class="control-label">Cédula:</label>
+                                        <input type="text" id="cedula" name="cedula" class="form-control input" placeholder="Ingresa la cédula" maxlength="9" minlength="9" />
+                                    </div>
+                                    <div class="form-group d-flex justify-content-center mt-4">
+                                        <a onclick="goBack()" class="btn boton">
+                                            Volver
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-counterclockwise" viewBox="0 0 16 16">
+                                                <path fill-rule="evenodd" d="M8 3a5 5 0 1 1-4.546 2.914.5.5 0 0 0-.908-.417A6 6 0 1 0 8 2z" />
+                                                <path d="M8 4.466V.534a.25.25 0 0 0-.41-.192L5.23 2.308a.25.25 0 0 0 0 .384l2.36 1.966A.25.25 0 0 0 8 4.466" />
+                                            </svg>
+                                        </a>
+                                        <div style="width: 20px;"></div>
+                                        <input type="submit" value="Buscar" class="btn boton" />
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
                     </div>
-                </form>
+                </div>
+            </div>
+            <div class="col-sm-4">
             </div>
         </div>
     </div>
-</div>
-
+    </div>
+</body>
 <script>
     document.getElementById("formCedula").addEventListener("submit", function (event) {
         const cedulaInput = document.getElementById("cedula");
@@ -49,4 +64,8 @@
             event.preventDefault(); // Evita que el formulario se envíe
         }
     });
+
+    function goBack() {
+        window.history.back();
+    }
 </script>

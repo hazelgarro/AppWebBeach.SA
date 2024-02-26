@@ -5,6 +5,12 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+
+<head>
+    <link rel="stylesheet" href="~/css/forms.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/AppWebBeachSA.styles.css" asp-append-version="true" />
+</head>
+
 <div class="d-flex justify-content-center">
     <div>
         <h1 class="text-center text-uppercase">Editar</h1>
@@ -19,24 +25,24 @@
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-            <input type="hidden" asp-for="IdCheque" />
+            <input class="form-control input" type="hidden" asp-for="IdCheque" />
 
-            <input type="hidden" asp-for="IdReservacion" />
+            <input class="form-control input" type="hidden" asp-for="IdReservacion" />
 
             <div class="form-group">
                 <label asp-for="NumeroCheque" class="control-label fw-semibold fs-5 mb-1">Digite el número de cheque: </label>
-                <input asp-for="NumeroCheque" class="form-control" />
+                <input asp-for="NumeroCheque" class="form-control input" />
                 <span asp-validation-for="NumeroCheque" class="text-danger"></span>
             </div>
 
             <div class="form-group">
                 <label asp-for="NombreBanco" class="control-label fw-semibold fs-5 mb-1">Digite el nombre del banco:</label>
-                <input asp-for="NombreBanco" class="form-control" />
+                <input asp-for="NombreBanco" class="form-control input" />
                 <span asp-validation-for="NombreBanco" class="text-danger"></span>
             </div>
 
             <div class="form-group d-flex justify-content-center mt-4">
-                <input type="submit" value="Guardar" class="btn btn-outline-success form-size fs-5 fw-semibold" />
+                <input type="submit" value="Guardar" class="btn boton" />
             </div>
         </form>
     </div>

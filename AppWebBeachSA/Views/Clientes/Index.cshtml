@@ -1,60 +1,68 @@
 ﻿@model IEnumerable<AppWebBeachSA.Models.Cliente>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Clientes";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<head class="fondo">
+    <link rel="stylesheet" href="~/css/forms.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/AppWebBeachSA.styles.css" asp-append-version="true" />
+</head>
+<body class="bg-cliente">
+    <section class="bg-color">
+        <h1>Clientes</h1>
 
-<h1>Index</h1>
-
-<p>
-    <a asp-action="ObtenerInformacionPersona">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Cedula)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.NombreCompleto)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Telefono)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Direccion)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Email)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Cedula)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.NombreCompleto)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Telefono)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Direccion)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Email)
-            </td>
-            <td>
-                    @Html.ActionLink("Edit", "Edit", new { id = item.Cedula }) |
-                    @Html.ActionLink("Details", "Details", new { id = item.Cedula }) |
-                    @Html.ActionLink("Delete", "Delete", new { id = item.Cedula })
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+        <p class=" pt-3">
+            <a class="btn boton" asp-action="ObtenerInformacionPersona">Nuevo cliente</a>
+        </p>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Cedula)
+                    </th>
+                    <th>
+                        Nombre
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Telefono)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Direccion)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Email)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td class="align-text">
+                            @Html.DisplayFor(modelItem => item.Cedula)
+                        </td>
+                        <td class="align-text">
+                            @Html.DisplayFor(modelItem => item.NombreCompleto)
+                        </td>
+                        <td class="align-text">
+                            @Html.DisplayFor(modelItem => item.Telefono)
+                        </td class="align-text">
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Direccion)
+                        </td class="align-text">
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Email)
+                        </td>
+                        <td class="btn-group">
+                            @Html.ActionLink("Edit", "Edit", new { id = item.Cedula }, new { @class = "btn boton" })
+                            @Html.ActionLink("Details", "Details", new { id = item.Cedula }, new { @class = "btn boton" })
+                            @Html.ActionLink("Delete", "Delete", new { id = item.Cedula }, new { @class = "btn boton" })
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </section>
+</body>

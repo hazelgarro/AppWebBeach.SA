@@ -3,12 +3,6 @@
     background-size: cover;
 }
 
-h1 {
-    color: darkcyan;
-    font-weight: 500;
-    font-size: xxx-large;
-}
-
 h4 {
     font-weight: 100;
 }
@@ -18,22 +12,22 @@ h4 {
 }
 
 .boton {
-    border: 1px solid black; 
+    border: 1px solid black;
     border-radius: 50px;
     background: none;
-    padding: 10px 20px; 
+    padding: 10px 20px;
     cursor: pointer;
 }
 
-.boton:hover {
-    border-color: darkcyan;
-    background: darkcyan;
-    font-weight: 400;
-    color: white !important;
-}
+    .boton:hover {
+        border-color: darkcyan;
+        background: darkcyan;
+        font-weight: 400;
+        color: white !important;
+    }
 
 .caracteristicas {
-    background-color: rgba(255, 255, 255, 100);
+    background-color: rgba(255, 255, 255, 0.9);
     border-radius: 1.5rem;
     padding: 20px;
     margin-top: 132px;
@@ -82,6 +76,10 @@ h4 {
         filter: opacity(0.5);
         /*filter: grayscale(90%);*/
     }
+
+.img-br {
+    border-radius: 50%
+}
 
 .card-text {
     position: absolute;

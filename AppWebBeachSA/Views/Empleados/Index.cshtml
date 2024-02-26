@@ -1,54 +1,62 @@
 ﻿@model IEnumerable<AppWebBeachSA.Models.Empleado>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Empleados";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<head class="fondo">
+    <link rel="stylesheet" href="~/css/forms.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/AppWebBeachSA.styles.css" asp-append-version="true" />
+</head>
+<body class="bg-empleado">
+    <section class="bg-color">
+    <h1>Empleados</h1>
 
-<h1>Index</h1>
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.ID)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.NombreCompleto)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Email)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.TipoUsuario)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.ID)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.NombreCompleto)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Email)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TipoUsuario)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { id=item.ID }) |
-                @Html.ActionLink("Details", "Details", new { id=item.ID }) |
-                @Html.ActionLink("Delete", "Delete", new { id=item.ID })
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+        <p class=" pt-3">
+            <a class="btn boton" asp-action="Create">Nuevo empleado</a>
+    </p>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.ID)
+                </th>
+                <th>
+                    Nombre
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Email)
+                </th>
+                <th>
+                    Tipo usuario
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td class="align-text">
+                        @Html.DisplayFor(modelItem => item.ID)
+                    </td>
+                    <td class="align-text">
+                        @Html.DisplayFor(modelItem => item.NombreCompleto)
+                    </td>
+                    <td class="align-text">
+                        @Html.DisplayFor(modelItem => item.Email)
+                    </td>
+                    <td class="align-text">
+                        @Html.DisplayFor(modelItem => item.TipoUsuario)
+                    </td>
+                        <td class="btn-group">
+                        @Html.ActionLink("Edit", "Edit", new { id = item.ID }, new { @class = "btn boton" })
+                        @Html.ActionLink("Details", "Details", new { id = item.ID }, new { @class = "btn boton" })
+                        @Html.ActionLink("Delete", "Delete", new { id = item.ID }, new { @class = "btn boton" })
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    </section>
+</body>

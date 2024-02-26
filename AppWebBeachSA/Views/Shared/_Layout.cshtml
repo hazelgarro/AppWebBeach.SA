@@ -32,6 +32,9 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Reservaciones" asp-action="Listado">Reservaciones</a>
                         </li>
+                        @* @if(User.Identity.IsAuthenticated){
+                            if(User.Identity)
+                        } *@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Empleados" asp-action="Index">Empleados</a>
                         </li>
@@ -46,9 +49,6 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Clientes" asp-action="Login">Iniciar Sesion &nbsp; <i class="fa-solid fa-user"></i></a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Empleados" asp-action="Login">Iniciar Sesion Empleado &nbsp; <i class="fa-solid fa-user"></i></a>
-                        </li>
                     </ul>
                 </div>
             </div>
@@ -61,7 +61,7 @@
     </div>
 
     <footer class="border-top footer text-black bg-white mt-5">
-        <div class="container">
+        <div class="container poppins-regular">
             <div>
                 &copy; 2024 - Hotel Beach S.A. -
                 <a asp-area="" asp-controller="Home" asp-action="Sobre">Sobre nosotros</a>&nbsp;

@@ -1,0 +1,63 @@
+﻿.bg-cliente {
+    background-image: url('../images/photo-five.jpg');
+    background-size: cover;
+}
+
+.bg-reserva {
+    background-image: url('../images/photo-three.jpg');
+    background-size: cover;
+}
+
+.bg-paquete {
+    background-image: url('../images/photo-seven.jpg');
+    background-size: cover;
+}
+
+.bg-empleado {
+    background-image: url('../images/photo-six.jpg');
+    background-size: cover;
+}
+
+.bg-cCliente {
+    background-image: url('../images/photo-four.jpg');
+    background-size: cover;
+}
+
+
+.bg-color {
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 1.5rem;
+    padding: 20px;
+    margin-top: 132px;
+    box-shadow: 0px 9px 58px 9px rgba(0,0,0,0.1);
+}
+
+.align-text {
+    vertical-align: middle;
+}
+
+.boton {
+    border: 1px solid black;
+    border-radius: 50px;
+    background: none;
+    padding: 5px 20px;
+    cursor: pointer;
+   
+}
+
+    .boton:hover {
+        border-color: darkcyan;
+        background: darkcyan;
+        font-weight: 400;
+        color: white !important;
+    }
+.input {
+    border-radius: 50px;
+}
+
+@media only screen and (min-width: 768px) {
+    .bg-color {
+        width: 90rem;
+        margin-left: -5rem;
+    }
+}

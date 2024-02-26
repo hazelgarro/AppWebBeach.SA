@@ -1,0 +1,12 @@
+﻿body {
+    background-image: url('../images/photo-two.jpg');
+    background-size: cover;
+}
+
+.bg-color {
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 1.5rem;
+    padding: 20px;
+    margin-top: 132px;
+    box-shadow: 0px 9px 58px 9px rgba(0,0,0,0.1);
+}
