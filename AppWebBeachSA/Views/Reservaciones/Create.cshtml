@@ -7,6 +7,10 @@
     string cedulaCliente = TempData["CedulaCliente"] as string;
 }
 
+<head>
+    <link rel="stylesheet" href="~/css/forms.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/AppWebBeachSA.styles.css" asp-append-version="true" />
+</head>
 <div class="d-flex justify-content-center">
     <div>
         <h1 class="text-center text-uppercase">Agregar</h1>
@@ -18,27 +22,18 @@
 <hr />
 <div class="d-flex justify-content-center">
     <div>
-        <div class="d-flex justify-content-center mb-2">
-            <a asp-action="Index" asp-controller="Home" class="btn btn-outline-dark fw-semibold">
-                Volver
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-counterclockwise" viewBox="0 0 16 16">
-                    <path fill-rule="evenodd" d="M8 3a5 5 0 1 1-4.546 2.914.5.5 0 0 0-.908-.417A6 6 0 1 0 8 2z" />
-                    <path d="M8 4.466V.534a.25.25 0 0 0-.41-.192L5.23 2.308a.25.25 0 0 0 0 .384l2.36 1.966A.25.25 0 0 0 8 4.466" />
-                </svg>
-            </a>
-        </div>
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
             <div class="form-group">
                 <label asp-for="CedulaCliente" class="control-label fw-semibold fs-5 mb-1">Digite su numero de cédula: </label>
-                <input asp-for="CedulaCliente" value="@cedulaCliente" class="form-control" readonly/>
+                <input asp-for="CedulaCliente" value="@cedulaCliente" class="form-control input" readonly/>
                 <span asp-validation-for="CedulaCliente" class="text-danger"></span>
             </div>
 
             <div class="form-group">
                 <label asp-for="IdPaquete" class="control-label fw-semibold fs-5 mt-2 mb-1">Seleccione el paquete que desea adquirir: </label>
-                <select asp-for="IdPaquete" class="form-select">
+                <select asp-for="IdPaquete" class="form-select input">
                     @foreach (var paquete in ViewBag.ListaPaquetes)
                     {
                         <option selected="selected" value="@paquete.ID">@paquete.NombrePaquete</option>
@@ -49,7 +44,7 @@
 
             <div class="form-group">
                 <label asp-for="TipoPago" class="control-label fw-semibold fs-5 mt-2 mb-1">Seleccione el método de pago:</label>
-                <select asp-for="TipoPago" class="form-select">
+                <select asp-for="TipoPago" class="form-select input">
                     <option selected="selected" value="Cheque">Cheque</option>
                     <option selected="selected" value="Tarjeta">Tarjeta</option>
                     <option selected="selected" value="Efectivo">Efectivo</option>
@@ -59,17 +54,31 @@
 
             <div class="form-group">
                 <label asp-for="Duracion" class="control-label fw-semibold fs-5 mt-2 mb-1">Duración de la estadía: </label>
-                <input asp-for="Duracion" class="form-control" />
+                <input asp-for="Duracion" class="form-control input" />
                 <span asp-validation-for="Duracion" class="text-danger"></span>
             </div>
 
-            <div class="form-group d-flex justify-content-center mt-4">
-                <input type="submit" value="Create" class="btn btn-outline-success form-size fs-5 fw-semibold" />
+            <div class="form-group pt-3 d-flex justify-content-between">
+                <a onclick="goBack()" class="btn boton">
+                    Volver
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-counterclockwise" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M8 3a5 5 0 1 1-4.546 2.914.5.5 0 0 0-.908-.417A6 6 0 1 0 8 2z" />
+                        <path d="M8 4.466V.534a.25.25 0 0 0-.41-.192L5.23 2.308a.25.25 0 0 0 0 .384l2.36 1.966A.25.25 0 0 0 8 4.466" />
+                    </svg>
+                </a>
+                <input type="submit" value="Create" class="btn boton"/>
             </div>
         </form>
     </div>
 </div>
+<script>
+
+    function goBack() {
+        window.history.back();
+    }
+</script>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
 }

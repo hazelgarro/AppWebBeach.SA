@@ -1,102 +1,110 @@
 ﻿@model IEnumerable<AppWebBeachSA.Models.Reservacion>
 
 @{
-    ViewData["Title"] = "Listado";
+    ViewData["Title"] = "Reservaciones";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<head class="fondo">
+    <link rel="stylesheet" href="~/css/forms.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/AppWebBeachSA.styles.css" asp-append-version="true" />
+</head>
+<body class="bg-reserva">
+    <section class="bg-color">
+        <h1>Reservaciones</h1>
 
-<h1>Listado</h1>
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Id)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CedulaCliente)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IdPaquete)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.TipoPago)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Duracion)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Subtotal)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Impuesto)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Descuento)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.MontoTotal)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Adelanto)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.MontoMensualidad)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Estado)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CedulaCliente)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IdPaquete)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TipoPago)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Duracion)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Subtotal)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Impuesto)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Descuento)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.MontoTotal)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Adelanto)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.MontoMensualidad)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Estado)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+        <p class=" pt-3 class="align-text"">
+            <a class="btn boton" asp-action="Create">Nueva Reservación</a>
+        </p>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Id)
+                    </th>
+                    <th>
+                        Cedula
+                    </th>
+                    <th>
+                        Paquete
+                    </th>
+                    <th>
+                        Tipo pago
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Duracion)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Subtotal)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Impuesto)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Descuento)
+                    </th>
+                    <th>
+                        Total
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Adelanto)
+                    </th>
+                    <th>
+                        Mensualidad
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Estado)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td class="align-text">
+                            @Html.DisplayFor(modelItem => item.Id)
+                        </td>
+                        <td class="align-text">
+                            @Html.DisplayFor(modelItem => item.CedulaCliente)
+                        </td>
+                        <td class="align-text">
+                            @Html.DisplayFor(modelItem => item.IdPaquete)
+                        </td>
+                        <td class="align-text">
+                            @Html.DisplayFor(modelItem => item.TipoPago)
+                        </td>
+                        <td class="align-text">
+                            @Html.DisplayFor(modelItem => item.Duracion)
+                        </td>
+                        <td class="align-text">
+                            @Html.DisplayFor(modelItem => item.Subtotal)
+                        </td>
+                        <td class="align-text">
+                            @Html.DisplayFor(modelItem => item.Impuesto)
+                        </td>
+                        <td class="align-text">
+                            @Html.DisplayFor(modelItem => item.Descuento)
+                        </td>
+                        <td class="align-text">
+                            @Html.DisplayFor(modelItem => item.MontoTotal)
+                        </td>
+                        <td class="align-text">
+                            @Html.DisplayFor(modelItem => item.Adelanto)
+                        </td>
+                        <td class="align-text">
+                            @Html.DisplayFor(modelItem => item.MontoMensualidad)
+                        </td>
+                        <td class="align-text">
+                            @Html.DisplayFor(modelItem => item.Estado)
+                        </td>
+                        <td class="btn-group">
+                            @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }, new { @class = "btn boton" })
+                            @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }, new { @class = "btn boton" })
+                            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ }, new { @class = "btn boton" })
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </section>
+</body>
