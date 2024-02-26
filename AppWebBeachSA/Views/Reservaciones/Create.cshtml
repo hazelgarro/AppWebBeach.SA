@@ -26,8 +26,8 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
             <div class="form-group">
-                <label asp-for="CedulaCliente" class="control-label fw-semibold fs-5 mb-1">Digite su numero de cédula: </label>
-                <input asp-for="CedulaCliente" value="@cedulaCliente" class="form-control input" readonly/>
+                <label asp-for="CedulaCliente" class="control-label fw-semibold fs-5 mb-1">Número de cédula: </label>
+                <input asp-for="CedulaCliente" value="@cedulaCliente" class="form-control input" readonly />
                 <span asp-validation-for="CedulaCliente" class="text-danger"></span>
             </div>
 
@@ -50,6 +50,12 @@
                     <option selected="selected" value="Efectivo">Efectivo</option>
                 </select>
                 <span asp-validation-for="TipoPago" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="FechaReserva" class="control-label fw-semibold fs-5 mt-2 mb-1">Seleccione la fecha que desea reservar:</label>
+                <input asp-for="FechaReserva" class="form-control" />
+                <span asp-validation-for="FechaReserva" class="text-danger"></span>
             </div>
 
             <div class="form-group">

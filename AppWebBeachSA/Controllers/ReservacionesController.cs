@@ -19,6 +19,7 @@ namespace AppWebBeachSA.Controllers
             hotelAPI = new HotelAPI();
 
             client = hotelAPI.Initial();
+
         }
 
         /// <summary>
@@ -38,7 +39,13 @@ namespace AppWebBeachSA.Controllers
                 listado = JsonConvert.DeserializeObject<List<Reservacion>>(resultados);
             }
 
-            return View(listado);
+            ReservacionPaqueteLista listas = new ReservacionPaqueteLista();
+
+            listas.ListaReservaciones = listado;
+
+            listas.ListaPaquetes = await GetPaquetes();
+
+            return View(listas);
         }
 
 
@@ -101,20 +108,19 @@ namespace AppWebBeachSA.Controllers
         /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(List<IFormFile> files, [Bind] Reservacion pReservacion)
+        public async Task<IActionResult> Create([Bind] Reservacion pReservacion)
         {
             pReservacion.Id = await GetNumReserva();
             pReservacion.Estado = 'A';
 
-            var agregar = client.PostAsJsonAsync<Reservacion>("/Reservaciones/AgregarReserva", pReservacion);
-            await agregar;
-
-            var resultado = agregar.Result;
+            HttpResponseMessage resultado = await client.PostAsJsonAsync<Reservacion>("/Reservaciones/AgregarReserva", pReservacion);
 
             if (resultado.StatusCode == HttpStatusCode.OK)
             {
                 if (pReservacion.TipoPago.Equals("Cheque"))
                 {
+                    TempData["NumeroReserva"] = pReservacion.Id;
+                    TempData["EnviarCorreo"] = "true";
                     return RedirectToAction("Create", "Cheques");
                 }
                 else
@@ -131,6 +137,132 @@ namespace AppWebBeachSA.Controllers
 
 
 
+        /// <summary>
+        /// Metodo para enviar los datos de la reservacion que se va a editar
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<IActionResult> Edit(int id)
+        {
+            var reserva = new Reservacion();
+
+            HttpResponseMessage response = await client.GetAsync($"Reservaciones/BuscarReserva?id={id}");
+
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+                var resultado = response.Content.ReadAsStringAsync().Result;
+
+                reserva = JsonConvert.DeserializeObject<Reservacion>(resultado);
+            }
+
+            ViewBag.ListaPaquetes = await GetPaquetes();
+            return View(reserva);
+        }
+
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit([Bind] Reservacion pReserva)
+        {
+            pReserva.Estado = 'A';
+            var modificar = client.PutAsJsonAsync<Reservacion>("/Reservaciones/Editar", pReserva);
+            await modificar;
+
+            var resultado = modificar.Result;
+
+            if (resultado.StatusCode == HttpStatusCode.OK)
+            {
+                if (pReserva.TipoPago.Equals("Cheque"))
+                {
+                    var cheque = new Cheque();
+
+                    HttpResponseMessage response = await client.GetAsync($"Cheques/Consultar?Id={pReserva.Id}");
+
+                    if (response.StatusCode == HttpStatusCode.OK)
+                    {
+                        var chequeResultado = response.Content.ReadAsStringAsync().Result;
+
+                        cheque = JsonConvert.DeserializeObject<Cheque>(chequeResultado);
+                    }
+
+                    if (cheque.IdCheque == 0)
+                    {
+                        TempData["NumeroReserva"] = pReserva.Id;
+                        TempData["EnviarCorreo"] = "false";
+                        return RedirectToAction("Create", "Cheques");
+                    }
+                    else
+                    {
+                        return RedirectToAction("Edit", "Cheques", new { id = pReserva.Id });
+                    }
+                    
+                }
+                else
+                {
+                    return RedirectToAction("Index", "Home");
+                }
+            }
+            else
+            {
+                TempData["Mensaje"] = "No se ha podido modificar la reservación.";
+                return View(pReserva);
+            }
+        }
+
+
+
+        [HttpGet]
+        public async Task<IActionResult> Delete(int? id)
+        {
+            var reserva = new Reservacion();
+
+            HttpResponseMessage mensaje = await client.GetAsync($"Reservaciones/BuscarReserva?id={id}");
+
+            if (mensaje.StatusCode == HttpStatusCode.OK)
+            {
+                var resultado = mensaje.Content.ReadAsStringAsync().Result;
+
+                reserva = JsonConvert.DeserializeObject<Reservacion>(resultado);
+            }
+
+            return View(reserva);
+        }
+
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var reserva = new Reservacion();
+
+            HttpResponseMessage mensaje = await client.GetAsync($"Reservaciones/BuscarReserva?id={id}");
+
+            if (mensaje.StatusCode == HttpStatusCode.OK)
+            {
+                var resultado = mensaje.Content.ReadAsStringAsync().Result;
+
+                reserva = JsonConvert.DeserializeObject<Reservacion>(resultado);
+            }
+
+            if (reserva.TipoPago.Equals("Cheque"))
+            {
+                DeleteCheques(reserva.Id);
+            }
+
+            await client.DeleteAsync($"/Reservaciones/Eliminar?id={id}");
+
+            return RedirectToAction("Index", "Home");
+        }
+
+
+
+        public async void DeleteCheques(int id)
+        {
+            HttpResponseMessage response = await client.DeleteAsync($"/Cheques/Eliminar?Id={id}");
+        }
         /// <summary>
         /// Metodo para retornar la lista de paquetes
         /// </summary>

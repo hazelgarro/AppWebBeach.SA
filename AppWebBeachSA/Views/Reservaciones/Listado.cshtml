@@ -1,4 +1,4 @@
-﻿@model IEnumerable<AppWebBeachSA.Models.Reservacion>
+﻿@model AppWebBeachSA.Models.ReservacionPaqueteLista
 
 @{
     ViewData["Title"] = "Reservaciones";
@@ -11,96 +11,63 @@
 <body class="bg-reserva">
     <section class="bg-color">
         <h1>Reservaciones</h1>
-
-        <p class=" pt-3 class="align-text"">
-            <a class="btn boton" asp-action="Create">Nueva Reservación</a>
+        <p>
+            <a btn boton asp-action="ConfirmarCliente">Nueva Reservación</a>
         </p>
+
         <table class="table">
             <thead>
                 <tr>
                     <th>
-                        @Html.DisplayNameFor(model => model.Id)
+                        @Html.DisplayNameFor(model => model.ListaReservaciones.First().CedulaCliente)
                     </th>
                     <th>
-                        Cedula
+                        @Html.DisplayNameFor(model => model.ListaReservaciones.First().TipoPago)
                     </th>
                     <th>
-                        Paquete
+                        @Html.DisplayNameFor(model => model.ListaReservaciones.First().FechaReserva)
                     </th>
                     <th>
-                        Tipo pago
+                        @Html.DisplayNameFor(model => model.ListaReservaciones.First().Duracion)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.Duracion)
+                        @Html.DisplayNameFor(model => model.ListaReservaciones.First().MontoTotal)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.Subtotal)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Impuesto)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Descuento)
-                    </th>
-                    <th>
-                        Total
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Adelanto)
-                    </th>
-                    <th>
-                        Mensualidad
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Estado)
+                        @Html.DisplayNameFor(model => model.ListaReservaciones.First().MontoMensualidad)
                     </th>
                     <th></th>
                 </tr>
             </thead>
             <tbody>
-                @foreach (var item in Model)
+                @foreach (var item in Model.ListaReservaciones)
                 {
+
+                    var modalID = "R" + item.Id;
+
                     <tr>
                         <td class="align-text">
-                            @Html.DisplayFor(modelItem => item.Id)
-                        </td>
-                        <td class="align-text">
                             @Html.DisplayFor(modelItem => item.CedulaCliente)
-                        </td>
-                        <td class="align-text">
-                            @Html.DisplayFor(modelItem => item.IdPaquete)
                         </td>
                         <td class="align-text">
                             @Html.DisplayFor(modelItem => item.TipoPago)
                         </td>
                         <td class="align-text">
+                            @Html.DisplayFor(modelItem => item.FechaReserva)
+                        </td>
+                        <td class="align-text">
                             @Html.DisplayFor(modelItem => item.Duracion)
-                        </td>
-                        <td class="align-text">
-                            @Html.DisplayFor(modelItem => item.Subtotal)
-                        </td>
-                        <td class="align-text">
-                            @Html.DisplayFor(modelItem => item.Impuesto)
-                        </td>
-                        <td class="align-text">
-                            @Html.DisplayFor(modelItem => item.Descuento)
                         </td>
                         <td class="align-text">
                             @Html.DisplayFor(modelItem => item.MontoTotal)
                         </td>
                         <td class="align-text">
-                            @Html.DisplayFor(modelItem => item.Adelanto)
-                        </td>
-                        <td class="align-text">
                             @Html.DisplayFor(modelItem => item.MontoMensualidad)
                         </td>
-                        <td class="align-text">
-                            @Html.DisplayFor(modelItem => item.Estado)
-                        </td>
-                        <td class="btn-group">
-                            @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }, new { @class = "btn boton" })
-                            @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }, new { @class = "btn boton" })
-                            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ }, new { @class = "btn boton" })
+                        <td>
+                            @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn boton" })
+                            <button class="btn boton" type="button" data-bs-toggle="modal" data-bs-target="#@modalID">Details</button>
+                            @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @class = "btn boton" })
                         </td>
                     </tr>
                 }
@@ -108,3 +75,52 @@
         </table>
     </section>
 </body>
+
+@foreach (var reserva in Model.ListaReservaciones)
+{
+    var modalID = "R" + reserva.Id;
+    string nombrePack = " ";
+
+    foreach (var item in Model.ListaPaquetes)
+    {
+        if (item.ID == reserva.IdPaquete)
+        {
+            nombrePack = item.NombrePaquete;
+        }
+    }
+
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal fade" id="@modalID" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Detalles de la reservación: </h1>
+                        <button type="button" class="btn boton" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="card">
+                            <div class="card-header text-center">
+                                @reserva.CedulaCliente
+                            </div>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item">Tipo de paquete adquirido: @nombrePack</li>
+                                <li class="list-group-item">Subtotal: @reserva.Subtotal</li>
+                                <li class="list-group-item">Impuesto IVA: @reserva.Impuesto</li>
+                                @if (reserva.Descuento > 0)
+                                {
+                                    <li class="list-group-item">Descuento aplicado: @reserva.Descuento</li>
+                                }
+                                <li class="list-group-item">Monto total a pagar: @reserva.MontoTotal</li>
+                                <li class="list-group-item">Monto de adelanto: @reserva.Adelanto</li>
+                                <li class="list-group-item">Monto de mensualidad: @reserva.MontoMensualidad</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn boton" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

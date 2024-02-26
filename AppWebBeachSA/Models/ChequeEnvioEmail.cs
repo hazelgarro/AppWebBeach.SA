@@ -1,11 +1,7 @@
-﻿
-using System.ComponentModel.DataAnnotations;
-
-namespace AppWebBeachSA.Models
+﻿namespace AppWebBeachSA.Models
 {
-    public class Cheque
+    public class ChequeEnvioEmail
     {
-        [Key]
         public int IdCheque { get; set; }
 
         public int NumeroCheque { get; set; }
@@ -13,5 +9,7 @@ namespace AppWebBeachSA.Models
         public string NombreBanco { get; set; }
 
         public int IdReservacion { get; set; }
+
+        public bool EnvioEmail { get; set; }
     }
 }
