@@ -221,7 +221,6 @@ namespace AppWebBeachSA.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(Cliente cliente)
         {
-            // Enviar la solicitud al API para autenticar al usuario
             var response = await httpClient.PostAsJsonAsync("/Clientes/Login", cliente);
 
             if (response.IsSuccessStatusCode)
@@ -236,19 +235,26 @@ namespace AppWebBeachSA.Controllers
                 }
                 else if (resultado == "Ha iniciado sesión")
                 {
-                    var claims = new List<Claim>
-            {
-                new Claim(ClaimTypes.Name, cliente.Email),
-            };
+                    // Obtener el token del API después de iniciar sesión
+                    var tokenResponse = await httpClient.PostAsync($"/Clientes/AutenticarPW?email={cliente.Email}&password={cliente.Password}", null);
 
-                    var claimsIdentity = new ClaimsIdentity(claims, "Cookies");
-
-                    var authProperties = new AuthenticationProperties
+                    if (tokenResponse.IsSuccessStatusCode)
                     {
-                        IsPersistent = true,
-                    };                  
+                        var tokenResult = await tokenResponse.Content.ReadAsStringAsync();
+                        var autorizacion = JsonConvert.DeserializeObject<AutorizacionResponse>(tokenResult);
 
-                    return RedirectToAction("Index", "Home");
+                        if (autorizacion != null)
+                        {
+                            // Almacenar el token en la sesión
+                            HttpContext.Session.SetString("token", autorizacion.Token);
+
+                            // Redireccionar al usuario a la página de inicio
+                            return RedirectToAction("Index", "Home");
+                        }
+                    }
+
+                    TempData["Mensaje"] = "Error al obtener el token de autenticación";
+                    return View();
                 }
                 else
                 {

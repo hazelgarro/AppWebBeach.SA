@@ -23,16 +23,16 @@ namespace AppWebBeachSA.Controllers
         public async Task<IActionResult>Index ()
         {
             var lista = new List<Empleado>();
-           // httpClient.DefaultRequestHeaders.Authorization = AutorizacionToken();
+           httpClient.DefaultRequestHeaders.Authorization = AutorizacionToken();
 
             HttpResponseMessage response = await httpClient.GetAsync("/Empleados/Listado");
 
-            //if (ValidarTransaccion(response.StatusCode) == false)
-            //{
-            //    return RedirectToAction("Logout", "");
-            //}
+            if (ValidarTransaccion(response.StatusCode) == false)
+            {
+                return RedirectToAction("Logout", "");
+            }
 
-            if(response.IsSuccessStatusCode)
+            if (response.IsSuccessStatusCode)
             {
                 var result = await response.Content.ReadAsStringAsync();
                 lista = JsonConvert.DeserializeObject<List<Empleado>>(result);
@@ -57,7 +57,7 @@ namespace AppWebBeachSA.Controllers
             empleado.ID = 0;
 
             var agregar = httpClient.PostAsJsonAsync<Empleado>("/Empleados/Agregar", empleado);
-            // httpClient.DefaultRequestHeaders.Authorization = AutorizacionToken();
+            httpClient.DefaultRequestHeaders.Authorization = AutorizacionToken();
 
             await agregar;
 
@@ -81,14 +81,14 @@ namespace AppWebBeachSA.Controllers
 
             var user = new Empleado();
 
-            //httpClient.DefaultRequestHeaders.Authorization = AutorizacionToken();
+            httpClient.DefaultRequestHeaders.Authorization = AutorizacionToken();
 
             HttpResponseMessage response = await httpClient.GetAsync($"/Empleados/Consultar?ID={id}");
 
-            //if (ValidarTransaccion(response.StatusCode) == false)
-            //{
-            //    return RedirectToAction("Logout", "");
-            //}
+            if (ValidarTransaccion(response.StatusCode) == false)
+            {
+                return RedirectToAction("Logout", "");
+            }
 
             //Se todo fue correcto
             if (response.IsSuccessStatusCode)
@@ -107,7 +107,7 @@ namespace AppWebBeachSA.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit([Bind] Empleado user)
         {
-            //httpClient.DefaultRequestHeaders.Authorization = AutorizacionToken();
+            httpClient.DefaultRequestHeaders.Authorization = AutorizacionToken();
 
             var modificar = httpClient.PutAsJsonAsync<Empleado>("/Empleados/Modificar", user);
             await modificar;
@@ -130,7 +130,7 @@ namespace AppWebBeachSA.Controllers
         {
             Empleado temp = new Empleado();
 
-            //httpClient.DefaultRequestHeaders.Authorization = AutorizacionToken();
+            httpClient.DefaultRequestHeaders.Authorization = AutorizacionToken();
 
             HttpResponseMessage response = await httpClient.GetAsync($"/Empleados/Consultar?ID={id}");
 
@@ -150,7 +150,7 @@ namespace AppWebBeachSA.Controllers
         [HttpGet]
         public async Task<IActionResult> Delete(string id)
         {
-           // httpClient.DefaultRequestHeaders.Authorization = AutorizacionToken();
+            httpClient.DefaultRequestHeaders.Authorization = AutorizacionToken();
 
             var user = new Empleado();
 
@@ -178,7 +178,7 @@ namespace AppWebBeachSA.Controllers
         [ActionName("Delete")]
         public async Task<IActionResult> DeleteUsuario(string id)
         {
-            //httpClient.DefaultRequestHeaders.Authorization = AutorizacionToken();
+            httpClient.DefaultRequestHeaders.Authorization = AutorizacionToken();
 
             HttpResponseMessage response = await httpClient.DeleteAsync($"/Empleados/Eliminar?ID={id}");
 

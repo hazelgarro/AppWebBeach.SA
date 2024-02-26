@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Net.Http;
 using Newtonsoft.Json;
 using System.Net.Http.Headers;
+using System.Net;
 
 namespace AppWebBeachSA.Controllers
 {
@@ -23,11 +24,16 @@ namespace AppWebBeachSA.Controllers
         {
             List<Paquete> lista = new List<Paquete>();
 
-            //client.DefaultRequestHeaders.Authorization = AutorizacionToken();
+            client.DefaultRequestHeaders.Authorization = AutorizacionToken();
 
             HttpResponseMessage response = await client.GetAsync("Paquetes/Listado");
 
-            if(response.IsSuccessStatusCode)
+            if (ValidarTransaccion(response.StatusCode) == false)
+            {
+                return RedirectToAction("Logout", "Clientes");
+            }
+
+            if (response.IsSuccessStatusCode)
             {
                 var resultado = await response.Content.ReadAsStringAsync();
 
@@ -51,12 +57,17 @@ namespace AppWebBeachSA.Controllers
             paquete.ID = 0;
             paquete.FechaRegistro = DateTime.Now;
 
-            //client.DefaultRequestHeaders.Authorization = AutorizacionToken();
+            client.DefaultRequestHeaders.Authorization = AutorizacionToken();
 
             var agregar = client.PostAsJsonAsync<Paquete>("Paquetes/Agregar", paquete);
             await agregar;
 
             var resultado = agregar.Result;
+
+            if (ValidarTransaccion(resultado.StatusCode) == false)
+            {
+                return RedirectToAction("Logout", "Clientes");
+            }
 
             if (resultado.IsSuccessStatusCode)
             {
@@ -77,9 +88,14 @@ namespace AppWebBeachSA.Controllers
         {
             var paquete = new Paquete();
 
-            //client.DefaultRequestHeaders.Authorization = AutorizacionToken();
+            client.DefaultRequestHeaders.Authorization = AutorizacionToken();
 
             HttpResponseMessage response = await client.GetAsync($"Paquetes/Consultar?ID={id}");
+
+            if (ValidarTransaccion(response.StatusCode) == false)
+            {
+                return RedirectToAction("Logout", "Clientes");
+            }
 
             if (response.IsSuccessStatusCode)
             {
@@ -96,12 +112,17 @@ namespace AppWebBeachSA.Controllers
         public async Task<IActionResult> Edit([Bind] Paquete paquete)
         {
 
-            //client.DefaultRequestHeaders.Authorization = AutorizacionToken();
+           client.DefaultRequestHeaders.Authorization = AutorizacionToken();
 
             var modificar = client.PutAsJsonAsync<Paquete>("/Paquetes/Modificar", paquete);
             await modificar;
 
             var resultado = modificar.Result;
+
+            if (ValidarTransaccion(resultado.StatusCode) == false)
+            {
+                return RedirectToAction("Logout", "Clientes");
+            }
 
             if (resultado.IsSuccessStatusCode)
             {
@@ -121,9 +142,14 @@ namespace AppWebBeachSA.Controllers
         {
             var paquete = new Paquete();
 
-            //client.DefaultRequestHeaders.Authorization = AutorizacionToken();
+            client.DefaultRequestHeaders.Authorization = AutorizacionToken();
 
             HttpResponseMessage mensaje = await client.GetAsync($"/Paquetes/Consultar?ID={id}");
+
+            if (ValidarTransaccion(mensaje.StatusCode) == false)
+            {
+                return RedirectToAction("Logout", "Clientes");
+            }
 
             if (mensaje.IsSuccessStatusCode)
             {
@@ -139,11 +165,16 @@ namespace AppWebBeachSA.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ActionName("Delete")]
-        public async Task<IActionResult> DeleteBook(int id)
+        public async Task<IActionResult> DeletePaquete(int id)
         {
-            //client.DefaultRequestHeaders.Authorization = AutorizacionToken();
+            client.DefaultRequestHeaders.Authorization = AutorizacionToken();
 
             HttpResponseMessage response = await client.DeleteAsync($"/Paquetes/Eliminar?ID={id}");
+
+            if (ValidarTransaccion(response.StatusCode) == false)
+            {
+                return RedirectToAction("Logout", "Clientes");
+            }
 
             return RedirectToAction("Index");
         }
@@ -154,9 +185,14 @@ namespace AppWebBeachSA.Controllers
         {
             var paquete = new Paquete();
 
-            //client.DefaultRequestHeaders.Authorization = AutorizacionToken();
+            client.DefaultRequestHeaders.Authorization = AutorizacionToken();
 
             HttpResponseMessage respuesta = await client.GetAsync($"/Paquetes/Consultar?ID={id}");
+
+            if (ValidarTransaccion(respuesta.StatusCode) == false)
+            {
+                return RedirectToAction("Logout", "Clientes");
+            }
 
             if (respuesta.IsSuccessStatusCode)
             {
@@ -181,6 +217,22 @@ namespace AppWebBeachSA.Controllers
             }
 
             return autorizacion;
+        }
+
+
+        private bool ValidarTransaccion(HttpStatusCode resultado)
+        {
+            //Se vencio el token por ende debe hacer cerrar sesion
+            if (resultado == HttpStatusCode.Unauthorized)
+            {
+                TempData["MensajeSesion"] = "Su sesion ha expirado o no es válida";
+                return false;
+            }
+            else
+            {
+                TempData["MensajeSesion"] = null;
+                return true;
+            }
         }
     }
 }
