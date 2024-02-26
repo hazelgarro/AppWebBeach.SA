@@ -1,6 +1,7 @@
 ﻿using AppWebBeachSA.Models;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 using System.Net;
 
 namespace AppWebBeachSA.Controllers
@@ -53,6 +54,22 @@ namespace AppWebBeachSA.Controllers
             listas.ListaPaquetes = await GetPaquetes();
 
             return View(listas);
+        }
+
+        public async Task<IActionResult> ListadoCliente()
+        {
+            var cedulaClaim = User.Claims.FirstOrDefault(c => c.Type == "Cedula");
+            var cedula = cedulaClaim.Value;
+
+            var reservaciones = await ObtenerTodasLasReservaciones();
+            var reservacionesCliente = reservaciones.Where(r => r.CedulaCliente == cedula).ToList();
+
+            ReservacionPaqueteLista listas = new ReservacionPaqueteLista();
+            listas.ListaReservaciones = reservacionesCliente;
+            listas.ListaPaquetes = await GetPaquetes();
+
+            return View(listas);
+
         }
 
 
@@ -204,7 +221,7 @@ namespace AppWebBeachSA.Controllers
                     {
                         return RedirectToAction("Edit", "Cheques", new { id = pReserva.Id });
                     }
-                    
+
                 }
                 else
                 {
@@ -333,6 +350,26 @@ namespace AppWebBeachSA.Controllers
             }
 
 
+        }
+
+        public async Task<List<Reservacion>> ObtenerTodasLasReservaciones()
+        {
+            TempData["tipoCambio"] = null;
+
+            extraerTipoCambio();
+
+            List<Reservacion> listado = new List<Reservacion>();
+
+            HttpResponseMessage response = await client.GetAsync("/Reservaciones/ListaReservas");
+
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+                var resultados = response.Content.ReadAsStringAsync().Result;
+
+                listado = JsonConvert.DeserializeObject<List<Reservacion>>(resultados);
+            }
+
+            return listado;
         }
 
     }

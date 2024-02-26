@@ -29,26 +29,82 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Sobre">Sobre nosotros</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Reservaciones" asp-action="Listado">Reservaciones</a>
-                        </li>
-                        @* @if(User.Identity.IsAuthenticated){
-                            if(User.Identity)
-                        } *@
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Empleados" asp-action="Index">Empleados</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Clientes" asp-action="Index">Clientes</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Paquetes" asp-action="Index">Paquetes</a>
-                        </li>
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            var tipoUsuarioClaim = User.Claims.FirstOrDefault(c => c.Type == "TipoUsuario");
+                            var tipoUsuario = tipoUsuarioClaim.Value;
+
+                            if (tipoUsuario == "1")
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Reservaciones" asp-action="Listado">Reservaciones</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Empleados" asp-action="Index">Empleados</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Clientes" asp-action="Index">Clientes</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Paquetes" asp-action="Index">Paquetes</a>
+                                </li>
+                            }
+                            else
+                            {
+                                if (tipoUsuario == "2")
+                                {
+                                    <li class="nav-item">
+                                        <a class="nav-link text-dark" asp-area="" asp-controller="Reservaciones" asp-action="Listado">Reservaciones</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link text-dark" asp-area="" asp-controller="Clientes" asp-action="Index">Clientes</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link text-dark" asp-area="" asp-controller="Paquetes" asp-action="Index">Paquetes</a>
+                                    </li>
+                                }
+                                else
+                                {
+                                    if (tipoUsuario == "3")
+                                    {
+                                        <li class="nav-item">
+                                            <a class="nav-link text-dark" asp-area="" asp-controller="Reservaciones" asp-action="ListadoCliente">Reservaciones</a>
+                                        </li>
+                                    }
+                                }
+                            }
+
+
+                        }
+
                     </ul>
                     <ul class="navbar-nav">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Clientes" asp-action="Login">Iniciar Sesion &nbsp; <i class="fa-solid fa-user"></i></a>
-                        </li>
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="" asp-action="">Hola @User.Identity.Name</a>
+                            </li>
+                            var tipoUusarioClaim = User.Claims.FirstOrDefault(c => c.Type == "TipoUsuario");
+                            var tipoUsuario = tipoUusarioClaim.Value;
+                            if (tipoUsuario == "3")
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Clientes" asp-action="Logout">Logout</a>
+                                </li>
+                            }
+                            else
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Empleados" asp-action="Logout">Logout</a>
+                                </li>
+                            }
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Clientes" asp-action="Login">Iniciar Sesion &nbsp; <i class="fa-solid fa-user"></i></a>
+                            </li>
+                        }
                     </ul>
                 </div>
             </div>

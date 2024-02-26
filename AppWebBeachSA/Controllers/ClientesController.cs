@@ -160,7 +160,7 @@ namespace AppWebBeachSA.Controllers
             }
             return View(temp);
         }
-        
+
         public async Task<IActionResult> ObtenerInformacionPersona(string cedula)
         {
             Cliente datosPersona = new Cliente();
@@ -221,40 +221,63 @@ namespace AppWebBeachSA.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(Cliente cliente)
         {
-            var response = await httpClient.PostAsJsonAsync("/Clientes/Login", cliente);
+            HttpResponseMessage lista = await httpClient.GetAsync("Clientes/Listado");
+            if (lista.IsSuccessStatusCode)
+            {
+                string content = await lista.Content.ReadAsStringAsync();
+
+                List<Cliente> listaClientes = JsonConvert.DeserializeObject<List<Cliente>>(content);
+
+                Cliente clienteBuscado = listaClientes.FirstOrDefault(e => e.Email == cliente.Email);
+                cliente.TipoUsuario = clienteBuscado.TipoUsuario;
+                cliente.Cedula = clienteBuscado.Cedula;
+                cliente.Restablecer = clienteBuscado.Restablecer;
+            }
+
+            httpClient.DefaultRequestHeaders.Authorization = AutorizacionToken();
+            AutorizacionResponse autorizacion = null;
+
+            if (cliente == null)
+            {
+                TempData["Mensaje"] = "Usuario o contraseña incorrecta";
+                return View();
+            }
+
+            HttpResponseMessage response = await httpClient.PostAsync($"Clientes/AutenticarPW?email={cliente.Email}&password={cliente.Password}", null);
 
             if (response.IsSuccessStatusCode)
             {
-                var resultado = await response.Content.ReadAsStringAsync();
+                var resultado = response.Content.ReadAsStringAsync().Result;
+                autorizacion = JsonConvert.DeserializeObject<AutorizacionResponse>(resultado);
+            }
 
-                if (resultado == "Debe restablecer contraseña")
+            if (autorizacion != null)
+            {
+                if (cliente.Restablecer == 0)
                 {
                     TempData["EmailRestablecer"] = cliente.Email;
                     TempData["Mensaje"] = "Debe restablecer contraseña";
                     return RedirectToAction("Restablecer");
                 }
-                else if (resultado == "Ha iniciado sesión")
+                else if (cliente.Restablecer == 1)
                 {
-                    // Obtener el token del API después de iniciar sesión
-                    var tokenResponse = await httpClient.PostAsync($"/Clientes/AutenticarPW?email={cliente.Email}&password={cliente.Password}", null);
+                    var identity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme);
 
-                    if (tokenResponse.IsSuccessStatusCode)
+                    identity.AddClaim(new Claim(ClaimTypes.Name, cliente.Email));
+                    identity.AddClaim(new Claim("TipoUsuario", cliente.TipoUsuario.ToString()));
+                    identity.AddClaim(new Claim("Cedula", cliente.Cedula.ToString()));
+
+                    var principal = new ClaimsPrincipal(identity);
+                    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+
+                    HttpContext.Session.SetString("token", autorizacion.Token);
+
+                    var authProperties = new AuthenticationProperties
                     {
-                        var tokenResult = await tokenResponse.Content.ReadAsStringAsync();
-                        var autorizacion = JsonConvert.DeserializeObject<AutorizacionResponse>(tokenResult);
+                        IsPersistent = true,
+                    };
 
-                        if (autorizacion != null)
-                        {
-                            // Almacenar el token en la sesión
-                            HttpContext.Session.SetString("token", autorizacion.Token);
-
-                            // Redireccionar al usuario a la página de inicio
-                            return RedirectToAction("Index", "Home");
-                        }
-                    }
-
-                    TempData["Mensaje"] = "Error al obtener el token de autenticación";
-                    return View();
+                    return RedirectToAction("Index", "Home");
                 }
                 else
                 {

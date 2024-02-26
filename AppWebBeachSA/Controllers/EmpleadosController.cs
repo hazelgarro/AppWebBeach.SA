@@ -20,10 +20,10 @@ namespace AppWebBeachSA.Controllers
             httpClient = hotelApi.Initial();
         }
 
-        public async Task<IActionResult>Index ()
+        public async Task<IActionResult> Index()
         {
             var lista = new List<Empleado>();
-           httpClient.DefaultRequestHeaders.Authorization = AutorizacionToken();
+            httpClient.DefaultRequestHeaders.Authorization = AutorizacionToken();
 
             HttpResponseMessage response = await httpClient.GetAsync("/Empleados/Listado");
 
@@ -55,7 +55,7 @@ namespace AppWebBeachSA.Controllers
         public async Task<IActionResult> Create(List<IFormFile> files, [Bind] Empleado empleado)
         {
             empleado.ID = 0;
-
+            empleado.TipoUsuario = 2;
             var agregar = httpClient.PostAsJsonAsync<Empleado>("/Empleados/Agregar", empleado);
             httpClient.DefaultRequestHeaders.Authorization = AutorizacionToken();
 
@@ -69,7 +69,7 @@ namespace AppWebBeachSA.Controllers
             }
             else
             {
-                TempData["Mensaje"] = "No se logró registrar el empleado "+empleado.NombreCompleto;
+                TempData["Mensaje"] = "No se logró registrar el empleado " + empleado.NombreCompleto;
                 return View(empleado);
             }
 
@@ -201,6 +201,19 @@ namespace AppWebBeachSA.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login([Bind] Empleado empleado)
         {
+            HttpResponseMessage lista = await httpClient.GetAsync("/Empleados/Listado");
+
+            if (lista.IsSuccessStatusCode)
+            {
+                string content = await lista.Content.ReadAsStringAsync();
+
+                List<Empleado> listaEmpleados = JsonConvert.DeserializeObject<List<Empleado>>(content);
+
+                Empleado empleadoBuscado = listaEmpleados.FirstOrDefault(e => e.Email == empleado.Email);
+                empleado.TipoUsuario = empleadoBuscado.TipoUsuario;
+            }
+
+
             httpClient.DefaultRequestHeaders.Authorization = AutorizacionToken();
 
             AutorizacionResponse autorizacion = null;
@@ -226,6 +239,7 @@ namespace AppWebBeachSA.Controllers
                 var identity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme);
 
                 identity.AddClaim(new Claim(ClaimTypes.Name, empleado.Email));
+                identity.AddClaim(new Claim("TipoUsuario", empleado.TipoUsuario.ToString()));
 
                 var principal = new ClaimsPrincipal(identity);
 
