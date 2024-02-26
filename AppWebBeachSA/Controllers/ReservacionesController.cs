@@ -33,11 +33,6 @@ namespace AppWebBeachSA.Controllers
         /// <returns></returns>
         public async Task<IActionResult> Listado()
         {
-
-            TempData["tipoCambio"] = null;
-
-            extraerTipoCambio();
-
             List<Reservacion> listado = new List<Reservacion>();
 
             client.DefaultRequestHeaders.Authorization = AutorizacionToken();
@@ -58,7 +53,19 @@ namespace AppWebBeachSA.Controllers
 
             ReservacionPaqueteLista listas = new ReservacionPaqueteLista();
 
-            listas.ListaReservaciones = listado;
+            if (listado.Count > 0)
+            {
+                TempData["tipoCambio"] = null;
+
+                extraerTipoCambio();
+
+                listas.ListaReservaciones = listado;
+            }
+            else
+            {
+                TempData["MensajeReservacion"] = "No hay reservaciones registradas, por favor agregue una.";
+                return RedirectToAction("ConfirmarCliente", "Reservaciones");
+            }
 
             listas.ListaPaquetes = await GetPaquetes();
 
@@ -74,7 +81,17 @@ namespace AppWebBeachSA.Controllers
             var reservacionesCliente = reservaciones.Where(r => r.CedulaCliente == cedula).ToList();
 
             ReservacionPaqueteLista listas = new ReservacionPaqueteLista();
-            listas.ListaReservaciones = reservacionesCliente;
+
+            if (reservacionesCliente.Count > 0)
+            {
+                listas.ListaReservaciones = reservacionesCliente;
+            }
+            else
+            {
+                TempData["MensajeReservacion"] = "No hay reservaciones registradas, por favor agregue una.";
+                return RedirectToAction("ConfirmarCliente", "Reservaciones");
+            }
+
             listas.ListaPaquetes = await GetPaquetes();
 
             return View(listas);
