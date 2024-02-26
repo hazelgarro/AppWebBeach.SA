@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
 
 namespace AppWebBeachSA.Controllers
 {
@@ -38,7 +40,14 @@ namespace AppWebBeachSA.Controllers
 
             List<Reservacion> listado = new List<Reservacion>();
 
+            client.DefaultRequestHeaders.Authorization = AutorizacionToken();
+
             HttpResponseMessage response = await client.GetAsync("/Reservaciones/ListaReservas");
+
+            if (ValidarTransaccion(response.StatusCode) == false)
+            {
+                return RedirectToAction("Logout", "Clientes");
+            }
 
             if (response.StatusCode == HttpStatusCode.OK)
             {
@@ -69,7 +78,6 @@ namespace AppWebBeachSA.Controllers
             listas.ListaPaquetes = await GetPaquetes();
 
             return View(listas);
-
         }
 
 
@@ -97,7 +105,14 @@ namespace AppWebBeachSA.Controllers
         {
             Cliente cliente = new Cliente();
 
+            client.DefaultRequestHeaders.Authorization = AutorizacionToken();
+
             HttpResponseMessage response = await client.GetAsync($"Clientes/Buscar?cedula={pCedula}");
+
+            if (ValidarTransaccion(response.StatusCode) == false)
+            {
+                return RedirectToAction("Logout", "Clientes");
+            }
 
             if (response.StatusCode == HttpStatusCode.OK)
             {
@@ -137,7 +152,14 @@ namespace AppWebBeachSA.Controllers
             pReservacion.Id = await GetNumReserva();
             pReservacion.Estado = 'A';
 
+            client.DefaultRequestHeaders.Authorization = AutorizacionToken();
+
             HttpResponseMessage resultado = await client.PostAsJsonAsync<Reservacion>("/Reservaciones/AgregarReserva", pReservacion);
+
+            if (ValidarTransaccion(resultado.StatusCode) == false)
+            {
+                return RedirectToAction("Logout", "Clientes");
+            }
 
             if (resultado.StatusCode == HttpStatusCode.OK)
             {
@@ -171,7 +193,14 @@ namespace AppWebBeachSA.Controllers
         {
             var reserva = new Reservacion();
 
+            client.DefaultRequestHeaders.Authorization = AutorizacionToken();
+
             HttpResponseMessage response = await client.GetAsync($"Reservaciones/BuscarReserva?id={id}");
+
+            if (ValidarTransaccion(response.StatusCode) == false)
+            {
+                return RedirectToAction("Logout", "Clientes");
+            }
 
             if (response.StatusCode == HttpStatusCode.OK)
             {
@@ -191,10 +220,18 @@ namespace AppWebBeachSA.Controllers
         public async Task<IActionResult> Edit([Bind] Reservacion pReserva)
         {
             pReserva.Estado = 'A';
+
+            client.DefaultRequestHeaders.Authorization = AutorizacionToken();
+
             var modificar = client.PutAsJsonAsync<Reservacion>("/Reservaciones/Editar", pReserva);
             await modificar;
 
             var resultado = modificar.Result;
+
+            if (ValidarTransaccion(resultado.StatusCode) == false)
+            {
+                return RedirectToAction("Logout", "Clientes");
+            }
 
             if (resultado.StatusCode == HttpStatusCode.OK)
             {
@@ -203,6 +240,11 @@ namespace AppWebBeachSA.Controllers
                     var cheque = new Cheque();
 
                     HttpResponseMessage response = await client.GetAsync($"Cheques/Consultar?Id={pReserva.Id}");
+
+                    if (ValidarTransaccion(response.StatusCode) == false)
+                    {
+                        return RedirectToAction("Logout", "Clientes");
+                    }
 
                     if (response.StatusCode == HttpStatusCode.OK)
                     {
@@ -242,7 +284,14 @@ namespace AppWebBeachSA.Controllers
         {
             var reserva = new Reservacion();
 
+            client.DefaultRequestHeaders.Authorization = AutorizacionToken();
+
             HttpResponseMessage mensaje = await client.GetAsync($"Reservaciones/BuscarReserva?id={id}");
+
+            if (ValidarTransaccion(mensaje.StatusCode) == false)
+            {
+                return RedirectToAction("Logout", "Clientes");
+            }
 
             if (mensaje.StatusCode == HttpStatusCode.OK)
             {
@@ -262,7 +311,14 @@ namespace AppWebBeachSA.Controllers
         {
             var reserva = new Reservacion();
 
+            client.DefaultRequestHeaders.Authorization = AutorizacionToken();
+
             HttpResponseMessage mensaje = await client.GetAsync($"Reservaciones/BuscarReserva?id={id}");
+
+            if (ValidarTransaccion(mensaje.StatusCode) == false)
+            {
+                return RedirectToAction("Logout", "Clientes");
+            }
 
             if (mensaje.StatusCode == HttpStatusCode.OK)
             {
@@ -285,6 +341,8 @@ namespace AppWebBeachSA.Controllers
 
         public async void DeleteCheques(int id)
         {
+            client.DefaultRequestHeaders.Authorization = AutorizacionToken();
+
             HttpResponseMessage response = await client.DeleteAsync($"/Cheques/Eliminar?Id={id}");
         }
         /// <summary>
@@ -294,6 +352,8 @@ namespace AppWebBeachSA.Controllers
         public async Task<List<Paquete>> GetPaquetes()
         {
             List<Paquete> listado = new List<Paquete>();
+
+            client.DefaultRequestHeaders.Authorization = AutorizacionToken();
 
             HttpResponseMessage response = await client.GetAsync("/Paquetes/Listado");
 
@@ -317,6 +377,8 @@ namespace AppWebBeachSA.Controllers
         {
             int ultimoId = 0;
             List<Reservacion> listado = new List<Reservacion>();
+
+            client.DefaultRequestHeaders.Authorization = AutorizacionToken();
 
             HttpResponseMessage response = await client.GetAsync("/Reservaciones/ListaReservas");
 
@@ -346,7 +408,6 @@ namespace AppWebBeachSA.Controllers
                 tipoCambio = JsonConvert.DeserializeObject<TipoCambio>(result);
                 decimal precio = tipoCambio.venta;
                 TempData["tipoCambio"] = precio;
-                //TempData.Keep("tipoCambio");
             }
 
 
@@ -360,6 +421,8 @@ namespace AppWebBeachSA.Controllers
 
             List<Reservacion> listado = new List<Reservacion>();
 
+            client.DefaultRequestHeaders.Authorization = AutorizacionToken();
+
             HttpResponseMessage response = await client.GetAsync("/Reservaciones/ListaReservas");
 
             if (response.StatusCode == HttpStatusCode.OK)
@@ -372,5 +435,34 @@ namespace AppWebBeachSA.Controllers
             return listado;
         }
 
+        private AuthenticationHeaderValue AutorizacionToken()
+        {
+            var token = HttpContext.Session.GetString("token");
+
+            AuthenticationHeaderValue autorizacion = null;
+
+            if (token != null && token.Length != 0)
+            {
+                autorizacion = new AuthenticationHeaderValue("Bearer", token);
+            }//end if
+
+            return autorizacion;
+        }//end AutorizacionToken
+
+
+        private bool ValidarTransaccion(HttpStatusCode resultado)
+        {
+            if (resultado == HttpStatusCode.Unauthorized)
+            {
+                TempData["MensajeSesion"] = "Su sesion no es valida o ha expirado";
+                return false;
+            }
+            else
+            {
+                TempData["MensajeSesion"] = null;
+                return true;
+            }
+
+        }//end ValidarTransaccion
     }
 }

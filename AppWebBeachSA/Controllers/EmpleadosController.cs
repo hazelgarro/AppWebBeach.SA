@@ -201,21 +201,6 @@ namespace AppWebBeachSA.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login([Bind] Empleado empleado)
         {
-            HttpResponseMessage lista = await httpClient.GetAsync("/Empleados/Listado");
-
-            if (lista.IsSuccessStatusCode)
-            {
-                string content = await lista.Content.ReadAsStringAsync();
-
-                List<Empleado> listaEmpleados = JsonConvert.DeserializeObject<List<Empleado>>(content);
-
-                Empleado empleadoBuscado = listaEmpleados.FirstOrDefault(e => e.Email == empleado.Email);
-                empleado.TipoUsuario = empleadoBuscado.TipoUsuario;
-            }
-
-
-            httpClient.DefaultRequestHeaders.Authorization = AutorizacionToken();
-
             AutorizacionResponse autorizacion = null;
 
             if (empleado == null)
@@ -236,19 +221,32 @@ namespace AppWebBeachSA.Controllers
 
             if (autorizacion != null)
             {
-                var identity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme);
-
-                identity.AddClaim(new Claim(ClaimTypes.Name, empleado.Email));
-                identity.AddClaim(new Claim("TipoUsuario", empleado.TipoUsuario.ToString()));
-
-                var principal = new ClaimsPrincipal(identity);
-
-                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
-
                 HttpContext.Session.SetString("token", autorizacion.Token);
 
-                return RedirectToAction("Index", "Home");
+                HttpResponseMessage empleInfo = await httpClient.GetAsync($"Empleados/EmpleadoLogin?email={empleado.Email}");
 
+                if (empleInfo.StatusCode == HttpStatusCode.OK)
+                {
+                    var resultadoEmple = empleInfo.Content.ReadAsStringAsync().Result;
+
+                    Empleado empleadoBuscado = JsonConvert.DeserializeObject<Empleado>(resultadoEmple);
+
+                    empleado.TipoUsuario = empleadoBuscado.TipoUsuario;
+                }
+
+                if (empleado.TipoUsuario > 0)
+                {
+                    var identity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme);
+
+                    identity.AddClaim(new Claim(ClaimTypes.Name, empleado.Email));
+                    identity.AddClaim(new Claim("TipoUsuario", empleado.TipoUsuario.ToString()));
+
+                    var principal = new ClaimsPrincipal(identity);
+
+                    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+                }
+
+                return RedirectToAction("Index", "Home");
             }
             else
             {

@@ -33,7 +33,14 @@ namespace AppWebBeachSA.Controllers
         {
             List<Cliente> listado = new List<Cliente>();
 
+            httpClient.DefaultRequestHeaders.Authorization = AutorizacionToken();
+
             HttpResponseMessage response = await httpClient.GetAsync("Clientes/Listado");
+
+            if (ValidarTransaccion(response.StatusCode) == false)
+            {
+                return RedirectToAction("Logout", "Clientes");
+            }
 
             if (response.StatusCode == HttpStatusCode.OK)
             {
@@ -56,7 +63,6 @@ namespace AppWebBeachSA.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind] Cliente pCliente)
         {
-
             pCliente.TipoUsuario = 3;
             pCliente.Estado = 'A';
             pCliente.Restablecer = 0;
@@ -85,7 +91,14 @@ namespace AppWebBeachSA.Controllers
         {
             var usuario = new Cliente();
 
+            httpClient.DefaultRequestHeaders.Authorization = AutorizacionToken();
+
             HttpResponseMessage response = await httpClient.GetAsync($"Clientes/Buscar?cedula={id}");
+
+            if (ValidarTransaccion(response.StatusCode) == false)
+            {
+                return RedirectToAction("Logout", "Clientes");
+            }
 
             if (response.IsSuccessStatusCode)
             {
@@ -105,10 +118,17 @@ namespace AppWebBeachSA.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit([Bind] Cliente pCliente)
         {
+            httpClient.DefaultRequestHeaders.Authorization = AutorizacionToken();
+
             var modificar = httpClient.PutAsJsonAsync<Cliente>("Clientes/Modificar", pCliente);
             await modificar;
 
             var resultado = modificar.Result;
+
+            if (ValidarTransaccion(resultado.StatusCode) == false)
+            {
+                return RedirectToAction("Logout", "Clientes");
+            }
 
             if (resultado.IsSuccessStatusCode)
             {
@@ -126,7 +146,14 @@ namespace AppWebBeachSA.Controllers
         {
             var cliente = new Cliente();
 
+            httpClient.DefaultRequestHeaders.Authorization = AutorizacionToken();
+
             HttpResponseMessage response = await httpClient.GetAsync($"Clientes/Buscar?cedula={id}");
+
+            if (ValidarTransaccion(response.StatusCode) == false)
+            {
+                return RedirectToAction("Logout", "Clientes");
+            }
 
             if (response.IsSuccessStatusCode)
             {
@@ -141,7 +168,14 @@ namespace AppWebBeachSA.Controllers
         [ActionName("Delete")]
         public async Task<IActionResult> DeleteUser(string id)
         {
+            httpClient.DefaultRequestHeaders.Authorization = AutorizacionToken();
+
             HttpResponseMessage response = await httpClient.DeleteAsync($"/Clientes/EliminarCliente?vCedula={id}");
+
+            if (ValidarTransaccion(response.StatusCode) == false)
+            {
+                return RedirectToAction("Logout", "Clientes");
+            }
 
             return RedirectToAction("Index");
         }
@@ -151,7 +185,14 @@ namespace AppWebBeachSA.Controllers
         {
             Cliente temp = new Cliente();
 
+            httpClient.DefaultRequestHeaders.Authorization = AutorizacionToken();
+
             HttpResponseMessage response = await httpClient.GetAsync($"Clientes/Buscar?cedula={id}");
+
+            if (ValidarTransaccion(response.StatusCode) == false)
+            {
+                return RedirectToAction("Logout", "Clientes");
+            }
 
             if (response.StatusCode == System.Net.HttpStatusCode.OK)
             {
@@ -338,14 +379,7 @@ namespace AppWebBeachSA.Controllers
                 {
                     var resultado = await response.Content.ReadAsStringAsync();
 
-                    if (resultado == "Restablecer contraseña: Éxito")
-                    {
-                        TempData["Mensaje"] = "Contraseña restablecida con éxito";
-                    }
-                    else
-                    {
-                        TempData["Mensaje"] = resultado;
-                    }
+                    TempData["Mensaje"] = resultado;
 
                     return RedirectToAction("Login", "Clientes");
                 }
@@ -378,10 +412,26 @@ namespace AppWebBeachSA.Controllers
             if (token != null && token.Length != 0)
             {
                 autorizacion = new AuthenticationHeaderValue("Bearer", token);
-            }
+            }//end if
 
             return autorizacion;
-        }
+        }//end AutorizacionToken
+
+
+        private bool ValidarTransaccion(HttpStatusCode resultado)
+        {
+            if (resultado == HttpStatusCode.Unauthorized)
+            {
+                TempData["MensajeSesion"] = "Su sesion no es valida o ha expirado";
+                return false;
+            }
+            else
+            {
+                TempData["MensajeSesion"] = null;
+                return true;
+            }
+
+        }//end ValidarTransaccion
 
     }
 }
